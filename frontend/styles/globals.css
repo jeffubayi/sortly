@@ -1,0 +1,40 @@
+html,
+body {
+  padding: 0;
+  margin: auto;
+  background-color: #f7f9fc;
+  overflow: visible;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
+    Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.custom-player {
+  border-radius: 10px;
+}
+
+.MuiButton-outlined {
+  text-transform: capitalize !important;
+  border-radius: 0.5rem;
+}
+
+.MuiButton-contained {
+  text-transform: capitalize !important;
+  border-radius: 0.5rem;
+}
+
+.Mui-selected::hover {
+  border-bottom: "#00000 !important";
+}
+
+.react-player {
+  border-radius: "10px";
+}
