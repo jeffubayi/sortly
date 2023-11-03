@@ -9,7 +9,7 @@ import { GetServerSidePropsContext } from 'next'
 import Profile from "../../components/accountCard";
 import InviteList from "../../components/inviteList";
 import { toggleColorMode } from '../../redux/features/themeSlice';
-import { setUserProfile } from '../../redux/userProfileSlice'
+// import { setUserProfile } from '../../redux/userProfileSlice'
 import { supabase } from "../../utility/supabaseClient";
 
 interface RootState {
@@ -133,7 +133,7 @@ export default function About() {
             let { data, error } = await supabase.from('profiles').upsert(updates).select()
             console.log(`  data`, data)
             if (error) throw error
-            dispatch(setUserProfile(updates))
+            // dispatch(setUserProfile(updates))
             toast.success('Profile updated successfully!');
 
         } catch (error) {
