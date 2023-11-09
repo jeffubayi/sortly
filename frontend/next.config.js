@@ -2,6 +2,11 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  images: {
+    domains: [
+      'media.sortly.com'
+    ],
+  },
 }
 
 module.exports = nextConfig
