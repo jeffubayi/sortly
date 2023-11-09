@@ -146,13 +146,14 @@ export default function Navbar() {
             >
                 <Toolbar sx={{ flexWrap: 'wrap' }}>
                     <Box sx={{ display: "flex", gap: 1, flexGrow: 1 }}>
-                        <ListItem>
-                            <ListItemAvatar>
-                                <Avatar
-                                    sx={{ height: "2.5rem", width: "2.5rem" }}
-                                    src="https://images.surferseo.art/6171630f-b376-43b5-ad66-732c449a2792.png"
-                                />
-                            </ListItemAvatar>
+                        {/* <ListItem>
+                            <ListItemAvatar> */}
+                        <Avatar
+                            variant="square"
+                            sx={{ height: "2.4rem", width: "6.6rem" }}
+                            src="https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/231061/Sortly_Logo.png"
+                        />
+                        {/* </ListItemAvatar>
                             <ListItemText primary={<Typography
                                 variant="subtitle2"
                                 color="inherit"
@@ -166,7 +167,7 @@ export default function Navbar() {
                                     noWrap
                                 >
                                    {isSmallScreen ? "IMS": "Inventory Management System"}                                </Typography>} />
-                        </ListItem>
+                        </ListItem> */}
                     </Box >
                     {isLoggedIn && !isSmallScreen && (
                         <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -229,10 +230,9 @@ export default function Navbar() {
                             </IconButton>
                         }
                         {!isLoggedIn ? (
-                            <></>
-                            // <Button onClick={handleLogout} variant="contained" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
-                            //     Login
-                            // </Button>
+                            <Button onClick={handleLogout} variant="contained" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                Start a free trial
+                            </Button>
                         ) : (
                             <Tooltip title="Profile">
                                 <IconButton

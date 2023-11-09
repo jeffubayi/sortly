@@ -192,7 +192,7 @@ export default function Table(props: Props) {
     };
 
     return (
-        <Box sx={{ py: 2 }}>
+        <Box sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }}>
             {open &&
                 <ActionDialog
                     open={open}

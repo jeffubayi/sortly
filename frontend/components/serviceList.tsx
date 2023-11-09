@@ -67,8 +67,7 @@ const services = [
 export default function ServiceList() {
     return (
         <>
-            <Typography sx={{ px: 2, pt: 1, fontWeight: "bold" }}>Product Categories</Typography>
-            <Grid container spacing={2} alignItems="flex-end" sx={{p:2}}>
+            <Grid container spacing={2} alignItems="flex-end" sx={{px:2,pb:2}}>
                 {services.map((service: any) => (
                      <Grid
                      item

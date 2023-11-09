@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Paper, Card, CardHeader, Container, Grid, Typography,Avatar  } from '@mui/material';
+import { Paper, Card, CardHeader, Container, Grid, Typography, Avatar } from '@mui/material';
 import SchoolIcon from '@mui/icons-material/School';
 import { useUser, useSession, useSupabaseClient } from '@supabase/auth-helpers-react'
 import router from 'next/router';
@@ -51,14 +51,14 @@ export default function Reports() {
 
   const summary = [
     {
-      title: "Total Products",
+      title: "Items",
       count: products.length,
       icon: <ShoppingCartIcon fontSize="small" sx={{
         color: "text.secondary"
       }} />
     },
     {
-      title: "Total Store Value",
+      title: "Folders",
       count: totalStoreValue,
       icon: <InventoryRoundedIcon fontSize="small" sx={{
         color: "text.secondary"
@@ -84,8 +84,9 @@ export default function Reports() {
   return (
     <React.Fragment>
       <Container maxWidth="md" component="main" sx={{ mb: 8, mt: 4 }}>
-        <Title collection={`Hello,${userName}`} icon={<SchoolIcon />} title="Add product" path='courses' />
-        <Grid container spacing={3} mt={0.3} alignItems="flex-end">
+        {/* <Title collection={`Hello,${userName}`} icon={<SchoolIcon />} title="Add product" path='courses' /> */}
+        <Typography sx={{ mb: 1.5, fontWeight: "bold" }}>Inventory Summary</Typography>
+        <Grid container spacing={3} alignItems="flex-end">
           {summary.map((tier) => (
             <Grid
               item
@@ -114,31 +115,23 @@ export default function Reports() {
             xs={12}
             md={12}
           >
-            <Paper sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%) ' }} elevation={0}>
-              {/* <Courses /> */}
-              <DataGrid
-                rows={products ?? []}
-                loading={isLoading}
-                error={isError}
-              />
-            </Paper>
-          </Grid>
+            <Typography sx={{ mb: 1.5, fontWeight: "bold" }}>Recent Items</Typography>
+            {/* <Paper sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%) ' }} elevation={0}> */}
 
-          {/* <Grid
-            item
-            xs={12}
-            md={5}
-          >
-            <Paper sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }} elevation={0}>
-              <Calendar />
-            </Paper>
-          </Grid> */}
+            <DataGrid
+              rows={products ?? []}
+              loading={isLoading}
+              error={isError}
+            />
+            {/* </Paper> */}
+          </Grid>
           <Grid
             item
             xs={12}
             md={12}
           >
-            <Paper sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }} elevation={0}>
+            <Typography  sx={{ mb: 4, fontWeight: "bold" }}>Item Category</Typography>
+            <Paper sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)'}} elevation={0}>
               <Services />
             </Paper>
           </Grid>

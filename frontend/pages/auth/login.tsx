@@ -55,7 +55,7 @@ export default function Login() {
     return (
         <React.Fragment>
             <Head>
-                <title> Login | Maids of Honour Africa</title>
+                <title> Login | Sortly</title>
             </Head>
             <Grid container component="main" sx={{ height: '100vh' }} >
                 <CssBaseline />
@@ -154,7 +154,7 @@ export default function Login() {
                 </Grid>
                 <Grid item xs={false} sm={4} md={7}
                     sx={{
-                        backgroundImage: 'url(https://maidsofhonour.africa/static/media/chef3.6d4c44dc59093b00b3f8.jpg)',
+                        backgroundImage: 'url(https://cdn.dribbble.com/users/2616177/screenshots/9094753/media/e6e10209f151e988e2a309fe384d1a0c.png)',
                         backgroundRepeat: 'repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
