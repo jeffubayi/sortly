@@ -31,6 +31,10 @@ a {
   border-radius: 0.5rem;
 }
 
+.MuiButton-text {
+  text-transform: capitalize !important;
+}
+
 .Mui-selected::hover {
   border-bottom: "#00000 !important";
 }
