@@ -28,8 +28,8 @@ export default function Contracts() {
 
     return (
         <Container maxWidth="md" component="main" sx={{ p: 2 }} >
-             <PageTitle title='Contracts' />
-             <Title collection="My Contracts" />
+             <PageTitle title='Tags' />
+             <Title collection="All Tags" />
              <DataGrid
                 rows={data ?? []}
                 loading={isLoading}

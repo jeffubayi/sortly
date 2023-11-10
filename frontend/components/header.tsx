@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRouter } from "next/router";
 import { useSupabaseClient } from '@supabase/auth-helpers-react'
-import { Stack, Chip, Badge, Divider, ListItemIcon, Menu, MenuItem, IconButton, Button, AppBar, Avatar, Box, Toolbar, Tooltip, Typography, ListItem, ListItemAvatar, ListItemText, Card, CardHeader, Drawer, TextField } from '@mui/material';
+import { Stack, Chip, Badge, Divider, ListItemIcon, ListItemButton, Menu, MenuItem, IconButton, Button, AppBar, Avatar, Box, Toolbar, Tooltip, Typography, ListItem, ListItemAvatar, ListItemText, Card, CardHeader, Drawer, TextField } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -30,6 +30,8 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import DashboardRoundedIcon from '@mui/icons-material/DashboardRounded';
+import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 import NotificationsList from "./notifications"
 import { SET_NAME, SET_USER, selectIsLoggedIn } from '../redux/features/auth/authSlice'
 import { toggleColorMode } from '../redux/features/themeSlice';
@@ -173,7 +175,7 @@ export default function Navbar() {
                         <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', textAlign: 'center' }}>
                             <MenuItem onClick={() => router.push("/dashboard")} sx={{ color: currentRoute === "/dashboard" ? "text.secondary" : "text.primary" }}>
                                 <ListItemIcon>
-                                    <HomeIcon fontSize="small" sx={{ color: currentRoute === "/dashboard" ? "text.secondary" : "text.primary" }} />
+                                    <DashboardRoundedIcon fontSize="small" sx={{ color: currentRoute === "/dashboard" ? "text.secondary" : "text.primary" }} />
                                 </ListItemIcon>
                                 Dashboard
                             </MenuItem>
@@ -190,26 +192,26 @@ export default function Navbar() {
                                     <ListItemIcon>
                                         <ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/hire" ? "text.secondary" : "text.primary" }} />
                                     </ListItemIcon>
-                                    Products
+                                    Items
                                 </MenuItem>
                             )}
                             <MenuItem onClick={() => router.push("/contracts")} sx={{ color: currentRoute === "/contracts" ? "text.secondary" : "text.primary" }}>
                                 <ListItemIcon>
                                     <LocalOfferIcon fontSize="small" sx={{ color: currentRoute === "/contracts" ? "text.secondary" : "text.primary" }} />
                                 </ListItemIcon>
-                                Categories
+                                Tags
                             </MenuItem>
                             <MenuItem onClick={() => router.push("/courses")} sx={{ color: currentRoute === "/courses" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
                                 <ListItemIcon>
-                                    <StorefrontIcon fontSize="small" sx={{ color: currentRoute === "/courses" ? "text.secondary" : "text.primary" }} />
+                                    <AssessmentRoundedIcon fontSize="small" sx={{ color: currentRoute === "/courses" ? "text.secondary" : "text.primary" }} />
                                 </ListItemIcon>
-                                Vendors
+                                Reports
                             </MenuItem>
 
                         </Box>
                     )}
                     <div>
-                        {isLoggedIn && !isSmallScreen && (
+                        {/* {isLoggedIn && !isSmallScreen && (
 
                             <IconButton size="large" aria-label="show 4 new mails" color="inherit" onClick={() => router.push("/messages")}>
                                 <Badge badgeContent={4} color="error">
@@ -228,24 +230,41 @@ export default function Navbar() {
                                     <NotificationsIcon fontSize="small" />
                                 </Badge>
                             </IconButton>
-                        }
-                        {!isLoggedIn ? (
-                            <Button onClick={handleLogout} variant="contained" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
-                                Start a free trial
-                            </Button>
-                        ) : (
-                            <Tooltip title="Profile">
+                        } */}
+                        {isLoggedIn ? (
+                            <>
                                 <IconButton
-                                    onClick={handleClick}
-                                    size="small"
-                                    sx={{ ml: 1 }}
-                                    aria-controls={open ? 'account-menu' : undefined}
-                                    aria-haspopup="true"
-                                    aria-expanded={open ? 'true' : undefined}
+                                    size="large"
+                                    aria-label="show 17 new notifications"
+                                    color="inherit"
+                                    onClick={toggleDrawer("right", true)}
                                 >
-                                    <Avatar src={userData.photo || "avatar.png"} sx={{ width: 32, height: 32, border: '1px solid #15182D ' }} />
+                                    <Badge badgeContent={1} color="error">
+                                        <NotificationsIcon fontSize="small" />
+                                    </Badge>
                                 </IconButton>
-                            </Tooltip>
+
+                                <Tooltip title="Profile" >
+                                    <IconButton
+
+                                        size="large"
+                                        aria-label="show 17 new notifications"
+                                        color="inherit"
+                                        onClick={handleClick}
+                                    >
+                                        <Avatar src={userData.photo} alt={userName} sx={{height:"2.3rem",width:"2.3rem"}}/>
+                                    </IconButton>
+                                </Tooltip>
+                            </>
+                        ) : (
+                            <>
+                                <Button onClick={() => router.push("/auth/login")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                    Login
+                                </Button>
+                                <Button onClick={() => router.push("/auth/register")} variant="contained" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                    Start a free trial
+                                </Button>
+                            </>
                         )}
                         <Menu
                             anchorEl={anchorEl}
@@ -259,6 +278,7 @@ export default function Navbar() {
                                     overflow: 'visible',
                                     filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                     mt: 1.5,
+                                    minWidth:200,
                                     '& .MuiAvatar-root': {
                                         width: 50,
                                         height: 50
@@ -280,33 +300,16 @@ export default function Navbar() {
                             transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                             anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
                         >
+                            <ListItem >
+                                <Tooltip title="Profile" >
+                                    <ListItemAvatar>
+                                        <Avatar src={userData.photo} alt={userName} />
+                                    </ListItemAvatar>
+                                </Tooltip>
+                                <ListItemText primary={userName} secondary="Jan 9, 2014" />
 
-                            <Stack
-                                direction="column"
-                                justifyContent="center"
-                                alignItems="center"
-                                spacing={0.8}
-                                px={3.5}
-                                py={1}
-                            >
-                                <Avatar sx={{ border: '1px solid #15182D ' }} src={profile?.photo || "avatar.png"} />
-                                <Typography
-                                    variant="body2"
-                                    color="inherit"
-                                >
-                                    {profile?.name}
-                                </Typography>
-                                <Typography
-                                    variant="body2"
-                                    color="inherit"
-                                    noWrap
-                                >
-                                    {profile?.email}
-                                </Typography>
-                                {/* <Chip icon={<Person2Icon />} size='small' label={user?.user_metadata.role} variant="outlined" /> */}
-                            </Stack>
+                            </ListItem>
                             <Divider />
-
                             <MenuItem onClick={() => router.push("/settings")}>
                                 <ListItemIcon>
                                     <Settings fontSize="small" color="secondary" />

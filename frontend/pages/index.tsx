@@ -122,6 +122,7 @@ export default function FullScreenDialog() {
             src="https://media.sortly.com/wp-content/uploads/2022/04/12125817/overflow-screens.png"
             height="500"
             width="750"
+            alt="sortly"
           />
         </Grid>
       </Grid>

@@ -8,8 +8,8 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 export default function SProviders() {
     return (
         <Container maxWidth="md" component="main" sx={{ p: 2 }} >
-            <PageTitle title='Hire' />
-            <Title title="Filter" collection="Our Service Providers" icon={<FilterListIcon />} />
+            <PageTitle title='Items' />
+            <Title title="New Item" collection="All Items" icon={<FilterListIcon />} />
             <Grid container spacing={3} sx={{ mb: 6, p: 1 }}>
                 {[1, 2, 3, 4].map((listing: any, index) => (
                     <Grid key={index} item md={4} sm={12}>

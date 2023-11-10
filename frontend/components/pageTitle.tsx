@@ -1,10 +1,12 @@
 import React from 'react'
 import Head from "next/head";
 
-export default function PageTitle({ title }: { title: string }) {
+const PageTitle = ({ title }: { title: string }) => {
     return (
         <Head>
-            <title>{title} | Maids of honour </title>
+            <title>{title} | Sortly Inventory</title>
         </Head>
     );
 }
+
+export default PageTitle;

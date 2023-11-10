@@ -19,8 +19,8 @@ export default function Courses() {
     // }, []);
     return (
         <Container maxWidth="md" component="main" sx={{ p: 2 }} >
-            <PageTitle title="Courses" />
-            <Title title="Filter" collection='Our Courses' icon={<FilterListIcon />} />
+            <PageTitle title="Reports" />
+            <Title title="Filter" collection='Analytics' icon={<FilterListIcon />} />
             <Grid container spacing={3} sx={{ mb: 6, p: 1 }}>
                 {courses?.map((course: any,index: React.Key | null | undefined) =>
                     <Grid key={index} item md={4} sm={12}>
