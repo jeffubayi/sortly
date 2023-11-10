@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Box, Grid, useMediaQuery, Container } from '@mui/material';
-import CourseCard from "../../components/courseCard";
+// import CourseCard from "../../components/courseCard";
 import Title from "../../components/addAction";
 import PageTitle from '../../components/pageTitle';
 import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
@@ -24,7 +24,7 @@ export default function Courses() {
             <Grid container spacing={3} sx={{ mb: 6, p: 1 }}>
                 {courses?.map((course: any,index: React.Key | null | undefined) =>
                     <Grid key={index} item md={4} sm={12}>
-                        <CourseCard />
+                        {/* <CourseCard /> */}
                     </Grid>
                 )
                 }

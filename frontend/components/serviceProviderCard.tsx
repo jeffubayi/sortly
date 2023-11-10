@@ -51,8 +51,8 @@ const propertyCard = () => {
                         direction="row" spacing={1}
                         mt={1}
                     >
-                        <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label="Electronics" size="small" variant="outlined" color="primary" sx={{ fontSize: "0.6rem" }} />
-                        <Chip icon={<LocalOfferIcon />} label="White" size="small" variant="outlined" color="primary" sx={{ fontSize: "0.6rem" }} />
+                        <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label="Electronics" size="small"   sx={{ fontSize: "0.6rem" }} />
+                        <Chip icon={<LocalOfferIcon />} label="White" size="small"  sx={{ fontSize: "0.6rem" }} />
                     </Stack>
                 </CardContent>
                 {/* <CardActions disableSpacing >

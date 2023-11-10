@@ -70,79 +70,79 @@ export default function About() {
         setValue(newValue);
     };
 
-    useEffect(() => {
-        async function getProfile() {
-            try {
-                setLoading(true)
-                if (!user) throw new Error('No user')
+    // useEffect(() => {
+    //     async function getProfile() {
+    //         try {
+    //             setLoading(true)
+    //             if (!user) throw new Error('No user')
 
-                let { data, error, status } = await supabase
-                    .from('accounts')
-                    .select(`*`)
-                    .eq('id', user.id)
-                    .single()
+    //             let { data, error, status } = await supabase
+    //                 .from('accounts')
+    //                 .select(`*`)
+    //                 .eq('id', user.id)
+    //                 .single()
 
-                if (error && status !== 406) {
-                    throw error
-                }
-                console.log(`dataaaa`, data, user.id)
-                if (data) {
-                    setUsername(data.username)
-                    setWebsite(data.website)
-                    setAvatarUrl(data.avatar_url)
-                    setCompany(data.firstName)
-                    setData(data)
-                    // dispatch(setUserProfile(data))
-                }
-            } catch (error) {
-                toast.error('Error loading user data!');
-                console.log(error)
-            } finally {
-                setLoading(false)
-            }
-        }
-        getProfile()
-    }, [user, dispatch])
-
-
+    //             if (error && status !== 406) {
+    //                 throw error
+    //             }
+    //             console.log(`dataaaa`, data, user.id)
+    //             if (data) {
+    //                 setUsername(data.username)
+    //                 setWebsite(data.website)
+    //                 setAvatarUrl(data.avatar_url)
+    //                 setCompany(data.firstName)
+    //                 setData(data)
+    //                 // dispatch(setUserProfile(data))
+    //             }
+    //         } catch (error) {
+    //             toast.error('Error loading user data!');
+    //             console.log(error)
+    //         } finally {
+    //             setLoading(false)
+    //         }
+    //     }
+    //     getProfile()
+    // }, [user, dispatch])
 
 
-    async function updateProfile({
-        username,
-        website,
-        avatar_url,
-        company,
-    }: {
-        username: string,
-        website: string,
-        avatar_url?: string,
-        company: string
-    }) {
-        try {
-            setLoading(true)
-            if (!user) throw new Error('No user')
 
-            const updates = {
-                id: user.id,
-                username,
-                website,
-                avatar_url,
-                company,
-                updated_at: new Date().toISOString(),
-            }
-            let { data, error } = await supabase.from('profiles').upsert(updates).select()
-            console.log(`  data`, data)
-            if (error) throw error
-            // dispatch(setUserProfile(updates))
-            toast.success('Profile updated successfully!');
 
-        } catch (error) {
-            toast.error('Error updating the data!');
-            console.log(error)
-        } finally {
-            setLoading(false)
-        }
-    }
+    // async function updateProfile({
+    //     username,
+    //     website,
+    //     avatar_url,
+    //     company,
+    // }: {
+    //     username: string,
+    //     website: string,
+    //     avatar_url?: string,
+    //     company: string
+    // }) {
+    //     try {
+    //         setLoading(true)
+    //         if (!user) throw new Error('No user')
+
+    //         const updates = {
+    //             id: user.id,
+    //             username,
+    //             website,
+    //             avatar_url,
+    //             company,
+    //             updated_at: new Date().toISOString(),
+    //         }
+    //         let { data, error } = await supabase.from('profiles').upsert(updates).select()
+    //         console.log(`  data`, data)
+    //         if (error) throw error
+    //         // dispatch(setUserProfile(updates))
+    //         toast.success('Profile updated successfully!');
+
+    //     } catch (error) {
+    //         toast.error('Error updating the data!');
+    //         console.log(error)
+    //     } finally {
+    //         setLoading(false)
+    //     }
+    // }
 
     return (
         <Container maxWidth="md" component="main" sx={{ p: 2 }} >
@@ -152,7 +152,7 @@ export default function About() {
                     <Profile
                         onUpload={(event: React.SyntheticEvent, url: string) => {
                             setAvatarUrl(url)
-                            updateProfile({ username, website, avatar_url: url, company })
+                            // updateProfile({ username, website, avatar_url: url, company })
                         }}
                         url={avatar_url}
                         username={data.firstName + "" + data.lastName}
@@ -299,7 +299,7 @@ export default function About() {
                                                 size="small"
                                                 sx={{ color: `contrastText` }}
                                                 variant="contained"
-                                                onClick={() => updateProfile({ username, website, avatar_url, company })}
+                                                // onClick={() => updateProfile({ username, website, avatar_url, company })}
                                                 disabled={loading}
                                             >
                                                 {loading ? 'Loading ...' : 'Save Changes'}
@@ -339,26 +339,24 @@ export default function About() {
     );
 }
 
-export const getServerSideProps = async (ctx: any) => {
-    // Create authenticated Supabase Client
-    // Check if we have a session
-    const {
-        data: { session },
-    } = await supabase.auth.getSession()
+// export const getServerSideProps = async (ctx: any) => {
+//     const {
+//         data: { session },
+//     } = await supabase.auth.getSession()
 
 
-    if (!session)
-        return {
-            redirect: {
-                destination: '/login',
-                permanent: false,
-            },
-        }
+//     if (!session)
+//         return {
+//             redirect: {
+//                 destination: '/login',
+//                 permanent: false,
+//             },
+//         }
 
-    return {
-        props: {
-            initialSession: session,
-            user: session.user,
-        },
-    }
-}
+//     return {
+//         props: {
+//             initialSession: session,
+//             user: session.user,
+//         },
+//     }
+// }

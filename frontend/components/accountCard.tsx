@@ -18,51 +18,51 @@ export default function ProfileCard({ url, onUpload, username, website }: Profil
   const [avatarUrl, setAvatarUrl] = useState("")
   const [uploading, setUploading] = useState(false)
 
-  useEffect(() => {
-    async function downloadImage(path: any) {
-      try {
-        const { data, error } = await supabase.storage.from('avatars').download(path)
-        if (error) {
-          throw error
-        }
-        const url = URL.createObjectURL(data)
-        setAvatarUrl(url)
-        console.log('Error downloading image: ', data)
-      } catch (error) {
-        console.log('Error downloading image: ', error)
-      }
-    }
-    if (url) downloadImage(url)
-  }, [supabase.storage, url])
+  // useEffect(() => {
+  //   async function downloadImage(path: any) {
+  //     try {
+  //       const { data, error } = await supabase.storage.from('avatars').download(path)
+  //       if (error) {
+  //         throw error
+  //       }
+  //       const url = URL.createObjectURL(data)
+  //       setAvatarUrl(url)
+  //       console.log('Error downloading image: ', data)
+  //     } catch (error) {
+  //       console.log('Error downloading image: ', error)
+  //     }
+  //   }
+  //   if (url) downloadImage(url)
+  // }, [supabase.storage, url])
 
 
 
-  async function uploadAvatar(event: any) {
-    try {
-      setUploading(true)
+  // async function uploadAvatar(event: any) {
+  //   try {
+  //     setUploading(true)
 
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.')
-      }
+  //     if (!event.target.files || event.target.files.length === 0) {
+  //       throw new Error('You must select an image to upload.')
+  //     }
 
-      const file = event.target.files[0]
-      const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
-      const filePath = `${fileName}`
+  //     const file = event.target.files[0]
+  //     const fileExt = file.name.split('.').pop()
+  //     const fileName = `${Math.random()}.${fileExt}`
+  //     const filePath = `${fileName}`
 
-      let { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
+  //     let { error: uploadError } = await supabase.storage.from('avatars').upload(filePath, file)
 
-      if (uploadError) {
-        throw uploadError
-      }
+  //     if (uploadError) {
+  //       throw uploadError
+  //     }
 
-      onUpload(event, filePath)
-    } catch (error) {
-      console.log('Error : ', error)
-    } finally {
-      setUploading(false)
-    }
-  }
+  //     onUpload(event, filePath)
+  //   } catch (error) {
+  //     console.log('Error : ', error)
+  //   } finally {
+  //     setUploading(false)
+  //   }
+  // }
 
   return (
     <Card sx={{ px: 2, py: 4, borderRadius: "0.7rem", mt: 2 }} elevation={0}>
@@ -77,7 +77,8 @@ export default function ProfileCard({ url, onUpload, username, website }: Profil
           badgeContent={
             <Tooltip title="Select Image">
               <IconButton aria-label="upload picture" component="label" >
-                <input hidden accept="image/*" type="file" onChange={uploadAvatar}
+                <input hidden accept="image/*" type="file" 
+                // onChange={uploadAvatar}
                   disabled={uploading} />
                 <EditIcon color="secondary" />
               </IconButton>

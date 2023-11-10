@@ -135,7 +135,7 @@ export default function Navbar() {
     const navItems = [
         { url: "/home", title: "Home", icon: <HomeIcon /> },
         { url: "/property", title: "jobs", icon: <LocationCityIcon /> },
-        { url: "/contracts", title: "contracts", icon: <WalletIcon /> },
+        { url: "/tags", title: "tags", icon: <WalletIcon /> },
         { url: "/chat", title: "Chat", icon: <MarkChatUnreadIcon /> },
     ]
 
@@ -147,29 +147,12 @@ export default function Navbar() {
                 elevation={0}
             >
                 <Toolbar sx={{ flexWrap: 'wrap' }}>
-                    <Box sx={{ display: "flex", gap: 1, flexGrow: 1 }}>
-                        {/* <ListItem>
-                            <ListItemAvatar> */}
+                    <Box onClick={() => router.push('/')} sx={{ display: "flex", gap: 1, flexGrow: 1 }}>
                         <Avatar
                             variant="square"
-                            sx={{ height: "2.4rem", width: "6.6rem" }}
+                            sx={{ height: "2.4rem", width: "6.6rem", cursor: "pointer" }}
                             src="https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/231061/Sortly_Logo.png"
                         />
-                        {/* </ListItemAvatar>
-                            <ListItemText primary={<Typography
-                                variant="subtitle2"
-                                color="inherit"
-                                noWrap
-                            >
-                                Sortly
-                            </Typography>}
-                                secondary={<Typography
-                                    variant="caption"
-                                    color="inherit"
-                                    noWrap
-                                >
-                                   {isSmallScreen ? "IMS": "Inventory Management System"}                                </Typography>} />
-                        </ListItem> */}
                     </Box >
                     {isLoggedIn && !isSmallScreen && (
                         <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', textAlign: 'center' }}>
@@ -188,22 +171,22 @@ export default function Navbar() {
                                     My Jobs
                                 </MenuItem>
                             ) : (
-                                <MenuItem onClick={() => router.push("/hire")} sx={{ color: currentRoute === "/hire" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
+                                <MenuItem onClick={() => router.push("/items")} sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
                                     <ListItemIcon>
-                                        <ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/hire" ? "text.secondary" : "text.primary" }} />
+                                        <ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary" }} />
                                     </ListItemIcon>
                                     Items
                                 </MenuItem>
                             )}
-                            <MenuItem onClick={() => router.push("/contracts")} sx={{ color: currentRoute === "/contracts" ? "text.secondary" : "text.primary" }}>
+                            <MenuItem onClick={() => router.push("/tags")} sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }}>
                                 <ListItemIcon>
-                                    <LocalOfferIcon fontSize="small" sx={{ color: currentRoute === "/contracts" ? "text.secondary" : "text.primary" }} />
+                                    <LocalOfferIcon fontSize="small" sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }} />
                                 </ListItemIcon>
                                 Tags
                             </MenuItem>
-                            <MenuItem onClick={() => router.push("/courses")} sx={{ color: currentRoute === "/courses" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
+                            <MenuItem onClick={() => router.push("/reports")} sx={{ color: currentRoute === "/reports" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
                                 <ListItemIcon>
-                                    <AssessmentRoundedIcon fontSize="small" sx={{ color: currentRoute === "/courses" ? "text.secondary" : "text.primary" }} />
+                                    <AssessmentRoundedIcon fontSize="small" sx={{ color: currentRoute === "/reports" ? "text.secondary" : "text.primary" }} />
                                 </ListItemIcon>
                                 Reports
                             </MenuItem>
@@ -252,12 +235,22 @@ export default function Navbar() {
                                         color="inherit"
                                         onClick={handleClick}
                                     >
-                                        <Avatar src={userData.photo} alt={userName} sx={{height:"2.3rem",width:"2.3rem"}}/>
+                                        <Avatar src={userData.photo} alt={userName} sx={{ height: "2.3rem", width: "2.3rem" }} />
                                     </IconButton>
                                 </Tooltip>
                             </>
                         ) : (
                             <>
+                                <Button onClick={() => router.push("/")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                    Features
+                                </Button>
+                                <Button onClick={() => router.push("/")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                    Pricing
+                                </Button>
+
+                                <Button onClick={() => router.push("/")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                    Contact us
+                                </Button>
                                 <Button onClick={() => router.push("/auth/login")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
                                     Login
                                 </Button>
@@ -278,7 +271,7 @@ export default function Navbar() {
                                     overflow: 'visible',
                                     filter: 'drop-shadow(0px 2px 8px rgba(0,0,0,0.32))',
                                     mt: 1.5,
-                                    minWidth:200,
+                                    minWidth: 200,
                                     '& .MuiAvatar-root': {
                                         width: 50,
                                         height: 50

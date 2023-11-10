@@ -9,6 +9,7 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import StorefrontIcon from '@mui/icons-material/Storefront';
+import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 
 export default function BottomNavbar() {
     const [value, setValue] = React.useState('dashboard');
@@ -35,20 +36,20 @@ export default function BottomNavbar() {
                     />
                 ) : (
                     <BottomNavigationAction
-                        label="Products"
-                        value="hire"
+                        label="Items"
+                        value="items"
                         icon={<ShoppingCartIcon />}
                     />
                 )}
                 <BottomNavigationAction
-                    label="Categories"
-                    value="contracts"
+                    label="Tags"
+                    value="tags"
                     icon={<LocalOfferIcon />}
                 />
                 <BottomNavigationAction
-                    label="Vendors"
-                    value="courses"
-                    icon={<StorefrontIcon />}
+                    label="Reports"
+                    value="reports"
+                    icon={<AssessmentRoundedIcon />}
                 />
             </BottomNavigation>
         </Paper>

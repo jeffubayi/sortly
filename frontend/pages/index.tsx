@@ -104,7 +104,7 @@ export default function FullScreenDialog() {
         <title> Sortly | Inventory</title>
       </Head>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={5}>
+        <Grid item xs={5} mt={2}>
           <Typography variant="h2" gutterBottom sx={{ fontWeight: "bold" }}>
             <span style={{ color: "#DE2538" }}>Simple </span>Inventory Management Software.
           </Typography>
