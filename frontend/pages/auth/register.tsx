@@ -42,9 +42,9 @@ export default function Register() {
             const data = await registerUser(userData);
             await dispatch(SET_LOGIN(true))
             await dispatch(SET_NAME(data?.name))
-            await dispatch(SET_USER(data))
+            // await dispatch(SET_USER(data))
             router.push('/dashboard');
-            toast.success(`Please check your email ${data?.email} for the login link`)
+            // toast.success(`Please check your email ${data?.email} for the login link`)
             setSubmitting(false)
         } catch (error: any) {
             setSubmitting(false)
@@ -85,7 +85,12 @@ export default function Register() {
                         </Typography>
                     </Box>
                     <Formik
-                        initialValues={initialValues}
+                        initialValues={{
+                            email: "",
+                            password: "",
+                            name: "",
+                            password2: "",
+                        }}
                         onSubmit={handleSignUp}
                         validationSchema={validationSchema}>
                         {({

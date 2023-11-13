@@ -77,27 +77,27 @@ export default function ProfileCard({ url, onUpload, username, website }: Profil
           badgeContent={
             <Tooltip title="Select Image">
               <IconButton aria-label="upload picture" component="label" >
-                <input hidden accept="image/*" type="file" 
-                // onChange={uploadAvatar}
+                <input hidden accept="image/*" type="file"
+                  onChange={uploadAvatar}
                   disabled={uploading} />
                 <EditIcon color="secondary" />
               </IconButton>
             </Tooltip>
           }
         >
-          {session ? (<Avatar alt="user" sx={{ width: "6.5rem", height: "6.5rem", m: 1 }} src={avatarUrl || user?.user_metadata?.avatar_url} />) : (
+          {username ? (<Avatar alt={username} sx={{ width: "6.5rem", height: "6.5rem", m: 1 }} src={avatarUrl} />) : (
             <Skeleton animation="wave" variant="circular" sx={{ width: "7rem", height: "7rem", m: 1 }} />
           )}
         </Badge>
-        {session ? <Typography component="div" variant="h6">
-          {username || user?.user_metadata?.name}
+        {username ? <Typography component="div" variant="h6">
+          {username}
         </Typography>
           : <Skeleton width="60%" />}
-        {session ? <Typography variant="subtitle2" color="text.secondary" component="div">
-          House Help
+        {bio ? <Typography variant="subtitle2" color="text.secondary" component="div">
+          {bio}
         </Typography>
           : <Skeleton />}
-        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+        {/* <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
           <Rating name="read-only" value={3} readOnly />
         </Box>
       </Stack>

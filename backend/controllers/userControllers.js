@@ -72,7 +72,7 @@ const loginUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
   if (!user) {
     res.status(400);
-    throw new Error("User not found,please sign in!");
+    throw new Error("User not found,please register");
   }
 
   //User exists, check if password is correct
@@ -97,7 +97,7 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json({ _id, name, email, photo, phone, bio, token });
   } else {
     res.status(400);
-    throw new Error("Invalid email or password!");
+    throw new Error("Invalid Email or Password!");
   }
 });
 

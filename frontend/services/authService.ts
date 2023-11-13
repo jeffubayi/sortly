@@ -20,7 +20,7 @@ export const registerUser = async (userData: any) => {
       toast.success("User Registered Successfully");
     }
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
@@ -42,12 +42,12 @@ export const loginUser = async (userData: any) => {
       toast.success(`Successful sign in with ${response.data.name}`);
     }
     return response.data;
-  } catch (error:any) {
+  } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
-      toast.error(message)
+    toast.error(message)
   }
 };
 //Logout User
@@ -57,12 +57,12 @@ export const logoutUser = async () => {
       `${BACKEND_URL}/api/users/logout`
     );
 
-  } catch (error:any) {
+  } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
-      toast.error(message)
+    toast.error(message)
   }
 };
 
@@ -74,12 +74,12 @@ export const forgotPassword = async (userData: any) => {
     );
     toast.success(response.data.message)
 
-  } catch (error:any) {
+  } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
       error.toString();
-      toast.error(message)
+    toast.error(message)
   }
 };
 //Reset Password
@@ -122,7 +122,7 @@ export const getUser = async () => {
     );
     return response.data;
 
-  } catch (error:any) {
+  } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
@@ -138,7 +138,7 @@ export const updateUser = async (formData: any) => {
     );
     return response.data;
 
-  } catch (error:any) {
+  } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||
       error.message ||
@@ -155,7 +155,7 @@ export const changePassword = async (formData: any) => {
     );
     return response.data;
 
-  } catch (error:any) {
+  } catch (error: any) {
     const message =
       (error?.response && error.response.data && error.response.data.message) ||
       error.message ||

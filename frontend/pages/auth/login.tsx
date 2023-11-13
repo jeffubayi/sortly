@@ -1,41 +1,38 @@
 import Head from 'next/head';
 import * as React from 'react';
-import { CssBaseline, Grid, Box, Divider, Paper, Typography, Avatar, Button, Checkbox, FormControlLabel, Link, Stack, Dialog } from '@mui/material';
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
+import { CssBaseline, Grid, Box, Divider, Paper, Typography, Avatar, Button, Stack } from '@mui/material';
 import router from 'next/router';
 import toast from 'react-hot-toast';
 import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
+import { useDispatch } from 'react-redux';
+import { useLocalStorage } from 'react-use';
+
 import { LogoButton, MainButton } from "../../components/Buttons";
 import { InputField } from "../../components/TextFields";
 import { loginUser } from "../../services/authService";
 import { SET_NAME, SET_LOGIN, SET_USER } from "../../redux/features/auth/authSlice"
-import { useDispatch } from 'react-redux';
 
+
+//login fields validation
 const validationSchema = Yup.object({
     email: Yup.string().email('Invalid email').required('Required'),
     password: Yup.string().required('Required'),
 });
 
-const initialValues: any = {
-    email: "",
-    password: "",
-}
-
-
 export default function Login() {
-    const supabase = useSupabaseClient()
     const dispatch = useDispatch()
-    
+    const [token, setToken] = useLocalStorage("token", );
+
     //email and password login
     const handleLogin = async (userData: any, { setSubmitting }: { setSubmitting: any }) => {
         try {
-            const data = await loginUser(userData)
-            console.log(`DATAAAA`,data)
-            if (data !== undefined) {
+            const user = await loginUser(userData)
+            if (user !== undefined) {
                 await dispatch(SET_LOGIN(true))
-                await dispatch(SET_NAME(data?.name))
-                // await dispatch(SET_USER(data))
+                await dispatch(SET_NAME(user?.name))
+                await dispatch(SET_USER(user))
+                setToken(user.token)
                 router.push('/dashboard');
                 setSubmitting(false)
             }
@@ -47,9 +44,7 @@ export default function Login() {
 
     //login via google
     const handleGoogleLogin = async () => {
-        const { data, error } = await supabase.auth.signInWithOAuth({
-            provider: 'google',
-        })
+        toast.error('Not yet implemented')
     };
 
     return (
@@ -78,7 +73,10 @@ export default function Login() {
                         </Typography>
                     </Box>
                     <Formik
-                        initialValues={initialValues}
+                        initialValues={{
+                            email: "",
+                            password: "",
+                        }}
                         onSubmit={handleLogin}
                         validationSchema={validationSchema}>
                         {({
@@ -142,7 +140,7 @@ export default function Login() {
                                             <Button fullWidth onClick={() => router.push('/auth/register')}>Register</Button>
                                         </Grid>
                                         <Grid item xs={12}>
-                                            <Box onClick={() => router.push('/auth/set')} >
+                                            <Box onClick={() => router.push('/auth/reset-password')} >
                                                 Reset Password
                                             </Box>
                                         </Grid>

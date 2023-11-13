@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import { useSession, useUser } from '@supabase/auth-helpers-react'
 import { TextField, MenuItem, Grid, Button, Box, List, ListItem, Skeleton, ListItemIcon, ListItemText, ListSubheader, Paper, Switch, Tab, Tabs, Typography, Container } from '@mui/material';
 import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from "react-redux";
@@ -10,7 +9,31 @@ import Profile from "../../components/accountCard";
 import InviteList from "../../components/inviteList";
 import { toggleColorMode } from '../../redux/features/themeSlice';
 // import { setUserProfile } from '../../redux/userProfileSlice'
-import { supabase } from "../../utility/supabaseClient";
+import useRedirectLoggedOutUser from '../../utility/useRedirectLoggedOutUser';
+import { getUser } from '../../services/authService';
+import { SET_NAME, SET_USER, selectUser } from '../../redux/features/auth/authSlice';
+import * as Yup from 'yup';
+import { LogoButton, MainButton } from "../../components/Buttons";
+import { InputField, SelectField } from "../../components/TextFields";
+import { updateUser } from "../../services/authService";
+import { Formik, Form } from 'formik';
+import PageTitle from '../../components/pageTitle';
+
+const validationSchema = Yup.object({
+    name: Yup.string().required('User name is required'),
+    email: Yup.string().email('Please enter a valid email').required('Email is required'),
+    phone: Yup.string().required('Phone is required'),
+    bio: Yup.string().required('required'),
+    photo: Yup.string()
+});
+
+interface userDataValues {
+    name: string,
+    email: string,
+    photo: string,
+    phone: string,
+    bio: string
+}
 
 interface RootState {
     darkMode: boolean;
@@ -50,8 +73,7 @@ function a11yProps(index: number) {
 }
 
 export default function About() {
-    const session = useSession()
-    const user = useUser()
+    const userData = useSelector(selectUser)
     const dispatch = useDispatch();
     const [value, setValue] = useState(0)
     const [loading, setLoading] = useState(true)
@@ -166,22 +188,80 @@ export default function About() {
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                                 <Tab iconPosition="start" label="Personal details" {...a11yProps(0)} sx={{ textTransform: 'capitalize' }} />
-                                <Tab iconPosition="start" label="Professional details" {...a11yProps(2)} sx={{ textTransform: 'capitalize' }} />
-                                <Tab iconPosition="start" label="Preferences" {...a11yProps(1)} sx={{ textTransform: 'capitalize' }} />
+                                <Tab iconPosition="start" label="Appearance" {...a11yProps(2)} sx={{ textTransform: 'capitalize' }} />
+                                <Tab iconPosition="start" label="Invites" {...a11yProps(1)} sx={{ textTransform: 'capitalize' }} />
                             </Tabs>
                         </Box>
                         <TabPanel value={value} index={0}>
                             <Paper sx={{ width: '100%', py: 2, px: 1, borderRadius: "1rem" }} elevation={0}>
-                                {session ? (
+                                <Formik
+                                    initialValues={userData}
+                                    onSubmit={handleProfileUpdate}
+                                    validationSchema={validationSchema}>
+                                    {({
+                                        isSubmitting,
+                                    }) => (
+                                        <Form>
+                                            {/* <Box sx={{ mx: 2 }}> */}
+                                                <Grid container
+                                                    rowSpacing={2}
+                                                    columnSpacing={{ xs: 2, sm: 3, md: 2 }}
+                                                >
+                                                    <Grid item xs={12}>
+                                                        <InputField
+                                                            name="name"
+                                                            placeholder='Type your name'
+                                                            label="User Name"
+                                                            type='text'
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12}md={6}>
+                                                        <InputField
+                                                            type='email'
+                                                            name="email"
+                                                            placeholder='Type your email address'
+                                                            label="Email"
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12} md={6}>
+                                                        <InputField
+                                                            name="phone"
+                                                            label="Phone Number"
+                                                            placeholder='Type your phonr number'
+                                                            type="text"
+                                                        />
+                                                    </Grid>
+                                                    <Grid item xs={12} >
+                                                        <InputField
+                                                            name="bio"
+                                                            label="Bio"
+                                                            type="text"
+                                                        />
+                                                    </Grid>
+
+                                                    <Grid item xs={12} >
+                                                        <MainButton
+                                                            type="submit"
+                                                            disabled={isSubmitting}
+                                                            variant="contained"
+                                                            label="Edit Profile"
+                                                        />
+                                                    </Grid>
+
+                                                </Grid>
+                                            {/* </Box> */}
+                                        </Form>
+                                    )}
+                                </Formik>
+                                {/* {profile ? (
                                     <Grid container rowSpacing={2} columnSpacing={{ xs: 2, sm: 3, md: 5 }}>
 
-                                        <Grid item xs={12} md={6}>
+                                        <Grid item xs={12} md={12}>
                                             <TextField
                                                 fullWidth
-                                                size="small"
-                                                label="first name"
+                                                label="User Name"
                                                 type="text"
-                                                value={data.firstName || user?.user_metadata.name}
+                                                value={profile?.name}
                                                 onChange={(e) => setUsername(e.target.value)}
                                                 InputProps={{
                                                     style: {
@@ -190,20 +270,14 @@ export default function About() {
                                                 }}
                                             />
                                         </Grid>
-                                        <Grid item md={6} xs={12} >
-                                            <TextField
-                                                fullWidth
-                                                size="small"
-                                                label="last name"
-                                                type="text"
-                                                value={data.lastName || user?.user_metadata.name}
-                                                onChange={(e) => setUsername(e.target.value)}
-                                                InputProps={{
-                                                    style: {
-                                                        borderRadius: "10px",
-                                                    }
-                                                }}
-                                            />
+
+                                        <Grid item xs={12} md={6} >
+                                            <TextField InputProps={{
+                                                style: {
+                                                    borderRadius: "10px",
+                                                }
+                                            }}
+                                                fullWidth label="Email" type="text" value={profile?.email} disabled />
                                         </Grid>
                                         <Grid item xs={12} md={6} >
                                             <TextField InputProps={{
@@ -211,23 +285,16 @@ export default function About() {
                                                     borderRadius: "10px",
                                                 }
                                             }}
-                                                fullWidth size="small" label="phone number" type="text" value={data.phoneNumber} />
-                                        </Grid>
-                                        <Grid item xs={12} md={6} >
-                                            <TextField InputProps={{
-                                                style: {
-                                                    borderRadius: "10px",
-                                                }
-                                            }}
-                                                fullWidth size="small" label="email" type="text" value={session?.user?.email} disabled />
+                                                fullWidth label="Phone Number" type="text" value={profile?.phone} />
                                         </Grid>
                                         <Grid item xs={12} >
                                             <TextField
                                                 fullWidth
-                                                size="small"
-                                                label="Location"
-                                                type="url"
-                                                value={data.location}
+                                                label="Bio"
+                                                multiline
+                                                rows={2}
+                                                type="text"
+                                                value={profile.bio}
                                                 onChange={(e) => setWebsite(e.target.value)}
                                                 InputProps={{
                                                     style: {
@@ -236,77 +303,19 @@ export default function About() {
                                                 }}
                                             />
                                         </Grid>
-
-                                        <Grid item xs={12} md={4} >
-                                            <TextField
-                                                InputProps={{
-                                                    style: {
-                                                        borderRadius: "10px",
-                                                    }
-                                                }}
-                                                select fullWidth size="small" value={company || ''}
-                                                onChange={(e) => setCompany(e.target.value)}
-                                                type="search"
-                                                label="Gender"
-                                            >
-                                                <MenuItem value="female">
-                                                    Male
-                                                </MenuItem>
-                                                <MenuItem value="female">
-                                                    Female
-                                                </MenuItem>
-                                            </TextField>
-                                        </Grid>
-                                        <Grid item xs={12} md={4} >
-                                            <TextField
-                                                InputProps={{
-                                                    style: {
-                                                        borderRadius: "10px",
-                                                    }
-                                                }}
-                                                fullWidth size="small" value={company || ''}
-                                                onChange={(e) => setCompany(e.target.value)}
-                                                type="number"
-                                                label="Age"
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} md={4}  >
-                                            <TextField
-                                                InputProps={{
-                                                    style: {
-                                                        borderRadius: "10px",
-                                                    }
-                                                }}
-                                                select fullWidth size="small" value={company || ''}
-                                                onChange={(e) => setCompany(e.target.value)}
-                                                type="search"
-                                                label="Level of education"
-                                            >
-                                                <MenuItem value="primary">
-                                                    Primary
-                                                </MenuItem>
-                                                <MenuItem value="secondary">
-                                                    Secondary
-                                                </MenuItem>
-                                                <MenuItem value="university">
-                                                    University
-                                                </MenuItem>
-                                            </TextField>
-                                        </Grid>
                                         <Grid item xs={12} >
                                             <Button
                                                 fullWidth
-                                                size="small"
                                                 sx={{ color: `contrastText` }}
                                                 variant="contained"
-                                                // onClick={() => updateProfile({ username, website, avatar_url, company })}
+                                                onClick={() => updateProfile({ username, website, avatar_url, company })}
                                                 disabled={loading}
                                             >
-                                                {loading ? 'Loading ...' : 'Save Changes'}
+                                                {'Save Changes'}
                                             </Button>
                                         </Grid>
                                     </Grid>
-                                ) : (<Skeleton />)}
+                                ) : (<Skeleton />)} */}
                             </Paper>
                         </TabPanel>
                         <TabPanel value={value} index={1}>
@@ -334,8 +343,8 @@ export default function About() {
                         </TabPanel>
                     </Paper>
                 </Grid>
-            </Grid>
-        </Container>
+            </Grid >
+        </Container >
     );
 }
 

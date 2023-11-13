@@ -1,6 +1,5 @@
 import * as React from 'react';
 import { useRouter } from "next/router";
-import { useSupabaseClient } from '@supabase/auth-helpers-react'
 import { Stack, Chip, Badge, Divider, ListItemIcon, ListItemButton, Menu, MenuItem, IconButton, Button, AppBar, Avatar, Box, Toolbar, Tooltip, Typography, ListItem, ListItemAvatar, ListItemText, Card, CardHeader, Drawer, TextField } from '@mui/material';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
 import Brightness7Icon from '@mui/icons-material/Brightness7';
@@ -35,56 +34,57 @@ import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 import NotificationsList from "./notifications"
 import { SET_NAME, SET_USER, selectIsLoggedIn } from '../redux/features/auth/authSlice'
 import { toggleColorMode } from '../redux/features/themeSlice';
-import { supabase } from "../utility/supabaseClient";
-import { logoutUser, getUser } from '../services/authService';
+import { logoutUser, getUser, getLoginStatus } from '../services/authService';
 import { SET_LOGIN, selectUser, selectName } from '../redux/features/auth/authSlice';
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 export default function Navbar() {
-    const session = useSession();
     const dispatch = useDispatch();
     const router = useRouter();
-    const theme = useTheme();
     const isLoggedIn = useSelector(selectIsLoggedIn);
     const userData = useSelector(selectUser)
     const userName = useSelector(selectName)
     const [profile, setProfile] = React.useState<any>(null)
     const [isLoading, setIsLoading] = React.useState(false)
-
-    React.useEffect(() => {
-        setIsLoading(true)
-        async function getUserData() {
-            const data = await getUser()
-            console.log(`profile`, data);
-
-            setProfile(data)
-            setIsLoading(false)
-            // await dispatch(SET_USER(data))
-            // await dispatch(SET_NAME(data.name))
-        }
-        getUserData()
-    }, [dispatch])
-
-    console.log(`USER`, userData, userName)
-    const user = useUser();
     const isSmallScreen = useMediaQuery("(max-width: 600px)");
-    const supabaseClient = useSupabaseClient()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const open = Boolean(anchorEl);
     const [notificationEl, setNotificationAnchorEl] = React.useState<null | HTMLElement>(null);
     const openNotifications = Boolean(notificationEl);
+    const currentRoute: string = router.pathname;
+    const [state, setState] = React.useState({
+        right: false,
+    });
+
+    // React.useEffect(() => {
+    //     async function loginStatus() {
+    //         const status = await getLoginStatus();
+    //         dispatch(SET_LOGIN(status));
+    //     }
+    //     loginStatus();
+    // }, [dispatch]);
+
     const handleNotificationsClick = (event: React.MouseEvent<HTMLElement>) => {
         setNotificationAnchorEl(event.currentTarget);
     };
     const handleNotificationsClose = () => {
         setNotificationAnchorEl(null);
     };
-    const currentRoute: string = router.pathname;
-    const [account, setAccount] = React.useState<any>();
-    const [state, setState] = React.useState({
-        right: false,
-    });
+
+    // React.useEffect(() => {
+    //     setIsLoading(true)
+    //     async function getUserData() {
+    //         const data = await getUser()
+    //         console.log(`profile`, data);
+
+    //         setProfile(data)
+    //         setIsLoading(false)
+    //     }
+    //     getUserData()
+    // }, [dispatch])
+
+    console.log(`USER`, userData, userName)
 
 
 
@@ -102,15 +102,15 @@ export default function Navbar() {
                 setState({ ...state, [anchor]: open });
             };
 
-    React.useEffect(() => {
-        const fetchOrders = async () => {
-            const { data } = await supabase.from('profiles').select(`account`).eq('id', user?.id).single();
-            setAccount(data?.account)
+    // React.useEffect(() => {
+    //     const fetchOrders = async () => {
+    //         const { data } = await supabase.from('profiles').select(`account`).eq('id', user?.id).single();
+    //         setAccount(data?.account)
 
-        }
+    //     }
 
-        fetchOrders()
-    }, [user?.id])
+    //     fetchOrders()
+    // }, [user?.id])
 
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -162,7 +162,7 @@ export default function Navbar() {
                                 </ListItemIcon>
                                 Dashboard
                             </MenuItem>
-                            {user?.user_metadata?.role == "client" ? (
+                            {/* {user?.user_metadata?.role == "client" ? (
 
                                 <MenuItem onClick={() => router.push("/jobs")} sx={{ color: currentRoute === "/jobs" ? "text.secondary" : "text.primary" }} >
                                     <ListItemIcon>
@@ -170,14 +170,14 @@ export default function Navbar() {
                                     </ListItemIcon>
                                     My Jobs
                                 </MenuItem>
-                            ) : (
-                                <MenuItem onClick={() => router.push("/items")} sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
-                                    <ListItemIcon>
-                                        <ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary" }} />
-                                    </ListItemIcon>
-                                    Items
-                                </MenuItem>
-                            )}
+                            ) : ( */}
+                            <MenuItem onClick={() => router.push("/items")} sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
+                                <ListItemIcon>
+                                    <ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary" }} />
+                                </ListItemIcon>
+                                Items
+                            </MenuItem>
+                            {/* )} */}
                             <MenuItem onClick={() => router.push("/tags")} sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }}>
                                 <ListItemIcon>
                                     <LocalOfferIcon fontSize="small" sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }} />
@@ -214,7 +214,7 @@ export default function Navbar() {
                                 </Badge>
                             </IconButton>
                         } */}
-                        {isLoggedIn ? (
+                        {isLoggedIn && (
                             <>
                                 <IconButton
                                     size="large"
@@ -235,11 +235,12 @@ export default function Navbar() {
                                         color="inherit"
                                         onClick={handleClick}
                                     >
-                                        <Avatar src={userData.photo} alt={userName} sx={{ height: "2.3rem", width: "2.3rem" }} />
+                                        <Avatar src={userData.photo || "avatarr.png"} alt={userName} sx={{ height: "2.3rem", width: "2.3rem" }} />
                                     </IconButton>
                                 </Tooltip>
                             </>
-                        ) : (
+                        )}
+                        {!isLoggedIn && !isSmallScreen && (
                             <>
                                 <Button onClick={() => router.push("/")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
                                     Features
@@ -255,9 +256,14 @@ export default function Navbar() {
                                     Login
                                 </Button>
                                 <Button onClick={() => router.push("/auth/register")} variant="contained" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
-                                    Start a free trial
+                                    {isSmallScreen ? "login" : "Start a free trial"}
                                 </Button>
                             </>
+                        )}
+                        {!isLoggedIn && isSmallScreen && (
+                            <Button onClick={() => router.push("/auth/login")} variant="contained" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                login
+                            </Button>
                         )}
                         <Menu
                             anchorEl={anchorEl}
@@ -299,7 +305,7 @@ export default function Navbar() {
                                         <Avatar src={userData.photo} alt={userName} />
                                     </ListItemAvatar>
                                 </Tooltip>
-                                <ListItemText primary={userName} secondary="Jan 9, 2014" />
+                                <ListItemText primary={userData.name} secondary={userData.email} />
 
                             </ListItem>
                             <Divider />

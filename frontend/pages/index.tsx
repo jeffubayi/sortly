@@ -17,12 +17,16 @@ import Toolbar from '@mui/material/Toolbar';
 import Link from '@mui/material/Link';
 import GlobalStyles from '@mui/material/GlobalStyles';
 import Container from '@mui/material/Container';
+import { useDispatch} from "react-redux";
+import { useEffect } from "react";
+import { getLoginStatus } from "../services/authService";
+import { SET_LOGIN } from "../redux/features/auth/authSlice";
 
 function Copyright(props: any) {
   return (
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
-      <Link color="inherit" href="https://mui.com/">
+      <Link color="inherit" href="https://bazenga.vercel.app/">
         BazengaDitial
       </Link>{' '}
       {new Date().getFullYear()}
@@ -96,15 +100,26 @@ const footers = [
 ];
 
 
-export default function FullScreenDialog() {
+export default function LandingPage() {
   const router = useRouter();
+  const dispatch = useDispatch();
+  const isSmallScreen = useMediaQuery("(max-width: 600px)");
+
+  useEffect(() => {
+    async function loginStatus() {
+      const status = await getLoginStatus();
+      dispatch(SET_LOGIN(status));
+    }
+    loginStatus();
+  }, [dispatch]);
+
   return (
     <Box sx={{ flexGrow: 1, py: 6, px: 10 }}>
       <Head>
         <title> Sortly | Inventory</title>
       </Head>
       <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-        <Grid item xs={5} mt={2}>
+        <Grid item sm={12}  md={5} mt={2}>
           <Typography variant="h2" gutterBottom sx={{ fontWeight: "bold" }}>
             <span style={{ color: "#DE2538" }}>Simple </span>Inventory Management Software.
           </Typography>
@@ -117,7 +132,7 @@ export default function FullScreenDialog() {
           </Stack>
 
         </Grid>
-        <Grid item xs={7}>
+        <Grid item sm={12} md={7}>
           <Image
             src="https://media.sortly.com/wp-content/uploads/2022/04/12125817/overflow-screens.png"
             height="500"

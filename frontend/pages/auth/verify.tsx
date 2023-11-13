@@ -61,7 +61,7 @@ export default function Verify() {
         // if there is a session it means that we do not need to verify the email beforehand
         if (session) {
             toast.success(`Successfully registered with ${email} `)
-            router.push('/auth/profile');
+            router.push('/dashboard');
         } else {
             router.push('/auth/verify');
             toast.success(`Please check your email ${email} for the login link`)

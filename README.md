@@ -50,4 +50,4 @@ Inventory management system to automate item stocks in/out
 
 Frontend :https://sortly-inventory.vercel.app
 
-Backend : https://sortly.onrender.com/api
+Backend : https://sortly.onrender.com
