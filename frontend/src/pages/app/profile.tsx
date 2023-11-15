@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import { Grid, Box, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Paper, Switch, Tab, Tabs, Typography, Container } from '@mui/material';
+import { Grid, Box, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Paper, Switch, Tab, Tabs, Typography, Container, Avatar, Badge, Card, IconButton, Skeleton, Stack, Tooltip } from '@mui/material';
 // import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from "react-redux";
 
@@ -14,6 +14,7 @@ import { MainButton } from "../../components/Buttons";
 import { InputField } from "../../components/TextFields";
 import { updateUser } from "../../services/authService";
 import { Formik, Form } from 'formik';
+import EditIcon from '@mui/icons-material/AddAPhoto';
 
 const validationSchema = Yup.object({
     name: Yup.string().required('User name is required'),
@@ -77,7 +78,7 @@ export default function About() {
 
     const [profile, setProfile] = useState<userDataValues>(userData)
     // const [isLoading, setIsLoading] = useState(false)
-    console.log('PROF', profile)
+    console.log('PROF', profile,userData)
 
     useEffect(() => {
         // setIsLoading(true)
@@ -99,6 +100,7 @@ export default function About() {
         try {
             const data = await updateUser(values);
             await dispatch(SET_NAME(data?.name))
+            setProfile(data)
             setSubmitting(false)
         } catch (error: any) {
             setSubmitting(false)
@@ -123,11 +125,41 @@ export default function About() {
                     />
                 </Grid> */}
                 <Grid item xs={12} md={4}>
-                    {/* <Profile
-                        url={userData?.photo}
-                        username={userData?.name}
-                        bio={userData?.bio}
-                    /> */}
+                    <Card sx={{ px: 2, py: 4, borderRadius: "0.7rem", mt: 2 }} elevation={0}>
+                        <Stack
+                            direction="column"
+                            justifyContent="center"
+                            alignItems="center"
+                            spacing={1}>
+                            <Badge
+                                overlap="circular"
+                                anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+                                badgeContent={
+                                    <Tooltip title="Select Image">
+                                        <IconButton aria-label="upload picture" component="label" >
+                                            <input hidden accept="image/*" type="file"
+                                            // onChange={uploadAvatar}
+                                            // disabled={uploading} 
+                                            />
+                                            <EditIcon color="secondary" />
+                                        </IconButton>
+                                    </Tooltip>
+                                }
+                            >
+                                {profile ? (<Avatar alt="user" sx={{ width: "6.5rem", height: "6.5rem", m: 1 }} src={profile.photo} />) : (
+                                    <Skeleton animation="wave" variant="circular" sx={{ width: "7rem", height: "7rem", m: 1 }} />
+                                )}
+                            </Badge>
+                            {profile ? <Typography component="div" variant="h6">
+                                {profile?.name}
+                            </Typography>
+                                : <Skeleton width="60%" />}
+                            {profile ? <Typography variant="subtitle2" color="text.secondary" component="div">
+                                {userData?.role}
+                            </Typography>
+                                : <Skeleton />}
+                        </Stack>
+                    </Card>
                 </Grid>
                 <Grid item xs={12} md={8} sx={{ mb: 60 }}>
 
@@ -143,7 +175,7 @@ export default function About() {
                         <TabPanel value={value} index={0}>
                             <Paper sx={{ width: '100%', py: 2, px: 1, borderRadius: "1rem" }} elevation={0}>
                                 <Formik
-                                    initialValues={userData}
+                                    initialValues={profile}
                                     onSubmit={handleProfileUpdate}
                                     validationSchema={validationSchema}>
                                     {({
@@ -167,6 +199,7 @@ export default function About() {
                                                     <InputField
                                                         type='email'
                                                         name="email"
+                                                        disabled={true}
                                                         placeholder='Type your email address'
                                                         label="Email"
                                                     />
@@ -176,7 +209,6 @@ export default function About() {
                                                         name="phone"
                                                         label="Phone Number"
                                                         placeholder='Type your phonr number'
-                                                        type="text"
                                                     />
                                                 </Grid>
                                                 <Grid item xs={12} >

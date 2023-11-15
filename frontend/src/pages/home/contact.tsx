@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography,Avatar } from '@mui/material';
 import Grid from '@mui/material/Grid';
 import Footer from "../../components/footer";
 import { MainButton } from "../../components/Buttons";
@@ -9,9 +9,9 @@ import * as Yup from 'yup';
 import toast from 'react-hot-toast';
 
 const validationSchema = Yup.object({
-    name: Yup.string().required('Your name is required'),
+    subject: Yup.string().required('A subject is required'),
     email: Yup.string().email('Please enter a valid email').required('Email is required'),
-    feedback: Yup.string().required('required'),
+    feedback: Yup.string().required('Please add a description'),
 });
 
 export default function Contact() {
@@ -21,14 +21,14 @@ export default function Contact() {
     };
 
     return (
-        <Box sx={{ flexGrow: 1, py: 6, px: 10 }}>
+        <Box sx={{ flexGrow: 1, py: 6, px: 15 }}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item sm={12} md={5} mt={2}>
                     <Typography variant="h2" gutterBottom sx={{ fontWeight: "bold" }}>
                         Submit a request
                     </Typography>
                     <Typography variant="h6" gutterBottom sx={{ mb: 4, color: "grey" }}>
-                    Please enter the details of your request. A member of our support staff will respond as soon as possible.
+                        Please enter the details of your request. A member of our support staff will respond as soon as possible.
                     </Typography>
                     <Formik
                         initialValues={{
@@ -72,7 +72,7 @@ export default function Contact() {
                                                 label="Description"
                                                 placeholder='Add feedback'
                                                 type="text"
-                                                // helpertext="Please enter the details of your request. A member of our support staff will respond as soon as possible."
+                                            // helpertext="Please enter the details of your request. A member of our support staff will respond as soon as possible."
                                             />
                                         </Grid>
 
@@ -92,10 +92,12 @@ export default function Contact() {
                     </Formik>
 
                 </Grid>
-                <Grid item sm={12} md={7}>
-                    <img
-                        src="https://media.sortly.com/wp-content/uploads/2022/09/14025105/hero_phone_1.png"
-                        // style={{ height: "500", width: "750" }}
+                <Grid item sm={12} md={3} mt={2}>
+                </Grid>
+                <Grid item sm={12} md={4}>
+                    <Avatar variant="square"
+                        sx={{ height: "100%", width: "100%" }}
+                        src="https://i.imgur.com/VwAMnJ4.png"
                         alt="sortly"
                     />
                 </Grid>

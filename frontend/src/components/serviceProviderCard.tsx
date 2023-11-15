@@ -29,6 +29,9 @@ const propertyCard = () => {
                     alt="item"
                 />
                 <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "center", mb: -1 }} >
+                    <Typography sx={{fontSize:"0.1rem",color:"grey"}} component='div'>
+                        23230232093
+                    </Typography>
                     <Typography variant="h6" color="primary" component='div'>
                         PS5 Digital
                     </Typography>
@@ -48,8 +51,8 @@ const propertyCard = () => {
                         direction="row" spacing={1}
                         mt={1}
                     >
-                        <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label="Electronics" size="small"   sx={{ fontSize: "0.6rem" }} />
-                        <Chip icon={<LocalOfferIcon />} label="White" size="small"  sx={{ fontSize: "0.6rem" }} />
+                        <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label="Electronics" size="small" sx={{ fontSize: "0.6rem" }} />
+                        <Chip icon={<LocalOfferIcon />} label="White" size="small" sx={{ fontSize: "0.6rem" }} />
                     </Stack>
                 </CardContent>
                 <CardActions disableSpacing >

@@ -94,7 +94,7 @@ export default function Login() {
     return (
         <React.Fragment
         >
-            <Box sx={{ px: 4 }}>
+            <Box sx={{ px: 2 }}>
 
                 {/* <Paper sx={{ px: 2, my: 2, py: 1 }} elevation={0}> */}
                 <Stepper activeStep={activeStep} alternativeLabel >
@@ -127,7 +127,7 @@ export default function Login() {
                         <Alert icon={false} severity="success" sx={{ mt: 2 }}>
                             Hi {userName},  for a more tailored onboarding experience <br></br>Please answer the following questions and we'll do the rest
                         </Alert>
-                        <Paper sx={{ px: 5 }} elevation={0}>
+                        <Paper sx={{ px: 2 }} elevation={0}>
                             {activeStep === 0 && (
                                 <div>
                                     <Divider orientation="horizontal" flexItem sx={{ my: 4 }}>
@@ -148,8 +148,8 @@ export default function Login() {
                                                 onChange={handleChange}
                                                 helperText={formErrors.role && formErrors.role}
                                             >
-                                                <MenuItem value="client">Client</MenuItem>
-                                                <MenuItem value="vendor">Vendor</MenuItem>
+                                                <MenuItem value="individual">Individual</MenuItem>
+                                                <MenuItem value="business">Business</MenuItem>
                                             </TextField>
                                         </Grid>
                                     </Grid>

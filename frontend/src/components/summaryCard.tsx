@@ -46,7 +46,7 @@ export default function SummaryCard({products}:{products:any}) {
       ),
     },
     {
-      title: "Store Value",
+      title: "Total Store Value",
       count: totalStoreValue,
       icon: (
         <InventoryRoundedIcon

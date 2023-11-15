@@ -55,7 +55,7 @@ const services = [
     {
         name: "Warranty Tags",
         logo: "",
-        description: " warranty claims and repairs"
+        description: " warranty claims & repairs"
     },
     {
         name: "Serial Number Tags",

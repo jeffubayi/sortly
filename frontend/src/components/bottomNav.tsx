@@ -24,8 +24,8 @@ export default function BottomNavbar() {
                     icon={<HomeIcon />}
                 />
                 <BottomNavigationAction
-                    label="Products"
-                    value="products"
+                    label="Items"
+                    value="items"
                     icon={<ShoppingCartIcon />}
                 />
                 <BottomNavigationAction

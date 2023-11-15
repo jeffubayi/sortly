@@ -9,7 +9,7 @@ const theme = createTheme({
     divider: "#c8ccd0",
     text: {
       primary: "#000",
-      secondary: "#9b1e2f",
+      secondary: "#DD2B3A",
     },
     background: {
       default: "#f7f9fc",

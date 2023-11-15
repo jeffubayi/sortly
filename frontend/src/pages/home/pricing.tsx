@@ -8,19 +8,20 @@ import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import StarIcon from '@mui/icons-material/StarBorder';
 import Container from '@mui/material/Container';
-import Footer from "../../components/footer";
+// import Footer from "../../components/footer";
+import { useNavigate } from "react-router-dom";
 
 const tiers = [
     {
         title: 'Free',
         price: '0',
         description: [
-            '10 users included',
-            '2 GB of storage',
-            'Help center access',
-            'Email support',
+            '100 Items Included',
+            '1 User License',
+            'Help Center Access',
+            'Email Support',
         ],
-        buttonText: 'Sign up for free',
+        buttonText: 'Start Free Trial',
         buttonVariant: 'outlined',
     },
     {
@@ -28,10 +29,12 @@ const tiers = [
         subheader: 'Most popular',
         price: '15',
         description: [
-            '20 users included',
-            '10 GB of storage',
-            'Help center access',
-            'Priority email support',
+            '2,000 Items included',
+            '5 User License',
+            'Help Center Access',
+            'Priority Email Support',
+            'Unlimited QR Code scan',
+            'Mpesa Payments'
         ],
         buttonText: 'Get started',
         buttonVariant: 'contained',
@@ -40,10 +43,12 @@ const tiers = [
         title: 'Enterprise',
         price: '30',
         description: [
-            '50 users included',
-            '30 GB of storage',
-            'Help center access',
-            'Phone & email support',
+            'Unlimited Items ',
+            '10+ User license',
+            'Help Center Access',
+            'Phone & Email Support',
+            'Unlimited QR Code scan',
+            'Mpesa Payments'
         ],
         buttonText: 'Contact us',
         buttonVariant: 'outlined',
@@ -54,14 +59,14 @@ const tiers = [
 
 export default function Pricing() {
     // const isSmallScreen = useMediaQuery("(max-width: 600px)");
-
+    const navigate = useNavigate();
 
     return (
-        <Box sx={{ flexGrow: 1, py: 6, px: 10 }}>
+        <Box sx={{ flexGrow: 1, py: 2, px: 2 }}>
             {/* pricing */}
-            <Container disableGutters maxWidth="md" component="main" sx={{mb:8}}>
+            <Container disableGutters maxWidth="md" component="main" sx={{ mb: 8,mt:6 }}>
                 <Typography
-                    variant="h3"
+                    variant="h4"
                     align="center"
                     sx={{ fontWeight: "bold" }}
                     color="text.primary"
@@ -73,7 +78,7 @@ export default function Pricing() {
                     Transform how your business does inventory with our powerful, easy-to-use solution. Find the right Sortly plan for you.
                 </Typography>
             </Container>
-            <Container maxWidth="md" component="main">
+            <Container maxWidth="lg" component="main">
                 <Grid container spacing={5} alignItems="flex-end">
                     {tiers.map((tier) => (
                         // Enterprise card is full width at sm breakpoint
@@ -119,7 +124,7 @@ export default function Pricing() {
                                     <ul>
                                         {tier.description.map((line) => (
                                             <Typography
-                                                component="li"
+                                                sx={{ fontWeight: "bold" ,color:"grey"}}
                                                 variant="subtitle1"
                                                 align="center"
                                                 key={line}
@@ -132,6 +137,7 @@ export default function Pricing() {
                                 <CardActions>
                                     <Button
                                         fullWidth
+                                        onClick={() => navigate(tier.title === "Enterprise" ? "/contact-us" : '/auth/register')}
                                         variant={tier.buttonVariant as 'outlined' | 'contained'}
                                     >
                                         {tier.buttonText}
@@ -142,7 +148,7 @@ export default function Pricing() {
                     ))}
                 </Grid>
             </Container>
-            <Footer/>
+            {/* <Footer /> */}
         </Box>
     );
 }

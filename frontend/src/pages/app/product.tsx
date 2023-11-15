@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid, Container, Button, Card, CardActions, ListItem, List, CardContent, useMediaQuery, CardMedia, Chip, Divider, Stack, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Autocomplete } from '@mui/material';
+import { Grid, Container, Button, Card, ListItem, List, CardContent, useMediaQuery, CardMedia, Chip, Divider, Stack, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Autocomplete } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
@@ -16,13 +16,19 @@ import useRedirectLoggedOutUser from "../../utility/useRedirectLoggedOutUser";
 import { selectIsLoggedIn } from '../../redux/features/auth/authSlice';
 import { getProducts } from '../../redux/features/product/productSlice';
 import { AppDispatch, RootState } from "../../redux/store";
-import { Formik, Form } from 'formik';
+import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { InputField } from '../../components/TextFields';
+import { createProduct, selectIsLoading } from '../../redux/features/product/productSlice';
+import toast from 'react-hot-toast';
 
 const validationSchema = Yup.object({
-    Category: Yup.string().required('Required'),
-    Body: Yup.string().required('Required'),
+    name: Yup.string().required('Required'),
+    category: Yup.string().required('Required'),
+    quantity: Yup.number().required('Required'),
+    price: Yup.number().required('Required'),
+    description: Yup.string().required('Required'),
+    image: Yup.string().required('Required'),
 });
 
 export default function Items() {
@@ -33,13 +39,16 @@ export default function Items() {
     const isSmallScreen = useMediaQuery("(max-width: 600px)");
     const [open, setOpen] = React.useState(false);
     const [openNew, setOpenNew] = React.useState(false);
+    const [item, setItem] = React.useState<any>({});
     const { products, isLoading, isError, message } = useSelector((state: RootState) => state.product);
-    console.log(`%%%products%%%`, products, isLoading, isError, message)
-    const handleSubmit = async (
-        values: any,
-    ) => {
 
-    };
+    const generateSKU = (category: any) => {
+        const letter = category.slice(0, 3).toUpperCase();
+        const number = Date.now();
+
+        const sku = letter + "-" + number
+        return sku;
+    }
 
     const handleClickOpenNew = () => {
         setOpenNew(true);
@@ -49,7 +58,8 @@ export default function Items() {
         setOpenNew(false);
     };
 
-    const handleClickOpen = () => {
+    const handleClickOpen = (item:any) => {
+        setItem(item)
         setOpen(true);
     };
 
@@ -103,6 +113,7 @@ export default function Items() {
             </List >
             {openNew && (
                 <Dialog
+                    fullScreen={isSmallScreen}
                     open={openNew}
                     onClose={handleCloseNew}
                     aria-labelledby="alert-dialog-title"
@@ -125,15 +136,32 @@ export default function Items() {
                     </IconButton>
                     <Formik
                         initialValues={{
-                            name: "PS6 Digital",
-                            sku: "FUG-1698244662451",
-                            category: "gaming",
-                            quantity: 46,
-                            price: 590,
-                            description: "PS5 Ultra",
-                            image: ""
+                            name: "",
+                            category: "",
+                            quantity: 0,
+                            price: 0,
+                            description: "",
+                            image: "https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"
                         }}
-                        onSubmit={handleSubmit}
+                        onSubmit={async (
+                            values: any,
+                            { setSubmitting }: FormikHelpers<any>
+                        ) => {
+                            try {
+                                alert(JSON.stringify(values, null, 2));
+                                // console.log(`data`, ...values, `sku`, generateSKU(values?.category));
+                                const productData = {
+                                    ...values,
+                                    sku: generateSKU(values.category)
+                                }
+                                console.log(`New Item`,productData)
+                                // await dispatch(createProduct(productData))
+                                toast.success(`Item ${values?.name} Added`)
+                                setSubmitting(false);
+                            } catch (error: any) {
+                                toast.error(error.message)
+                            }
+                        }}
                         validationSchema={validationSchema}>
                         {({
                             isSubmitting,
@@ -146,7 +174,7 @@ export default function Items() {
                                     >
                                         <Grid item xs={12}>
                                             <InputField
-                                                type='text'
+                                                type='website'
                                                 name="image"
                                                 placeholder='Add Image'
                                                 label="Item Picture"
@@ -161,13 +189,13 @@ export default function Items() {
                                             />
                                         </Grid>
                                         <Grid item xs={12} >
-                                            {/* <InputField
+                                            <InputField
+                                                type='text'
                                                 name="category"
+                                                placeholder='Category'
                                                 label="Item Category"
-                                                placeholder=''
-                                                type="text"
-                                            /> */}
-                                            <Autocomplete
+                                            />
+                                            {/* <Autocomplete
                                                 multiple
                                                 id="tags-filled"
                                                 options={top100Films.map((option) => option.title)}
@@ -185,7 +213,7 @@ export default function Items() {
                                                         placeholder="Select tags"
                                                     />
                                                 )}
-                                            />
+                                            /> */}
                                         </Grid>
                                         <Grid item xs={12} md={6}>
                                             <InputField
@@ -198,7 +226,7 @@ export default function Items() {
                                         <Grid item xs={12} md={6}>
                                             <InputField
                                                 name="quantity"
-                                                label="Item Price"
+                                                label="Item Quantity"
                                                 placeholder='Weight of item'
                                                 type="number"
                                             />
@@ -207,6 +235,7 @@ export default function Items() {
                                             <InputField
                                                 name="description"
                                                 label="Item Description"
+                                                rows={2}
                                                 placeholder='About the product'
                                                 type="text"
                                             />
@@ -215,7 +244,7 @@ export default function Items() {
                                 </DialogContent>
                                 <DialogActions sx={{ py: 1, px: 3 }}>
                                     <Button fullWidth variant="outlined" onClick={handleCloseNew}>Cancel</Button>
-                                    <Button fullWidth disabled={isSubmitting} variant="contained" type="submit" autoFocus startIcon={<FilterListIcon />}>
+                                    <Button fullWidth disabled={isSubmitting} variant="contained" type="submit" startIcon={<FilterListIcon />}>
                                         Create Item
                                     </Button>
                                 </DialogActions>
@@ -223,90 +252,99 @@ export default function Items() {
                         )}
                     </Formik>
                 </Dialog>
-            )}
-            {open && (
-                <Dialog
-                    open={open}
-                    onClose={handleClose}
-                    aria-labelledby="alert-dialog-title"
-                    aria-describedby="alert-dialog-description"
-                >
-                    <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
-                        PS5 Digital
-                    </DialogTitle>
-                    <IconButton
-                        aria-label="close"
-                        onClick={handleClose}
-                        sx={{
-                            position: 'absolute',
-                            right: 8,
-                            top: 8,
-                            color: (theme) => theme.palette.grey[500],
-                        }}
+            )
+            }
+            {
+                open && (
+                    <Dialog
+                        fullScreen={isSmallScreen}
+                        open={open}
+                        fullWidth
+                        maxWidth="sm"
+                        onClose={handleClose}
+                        aria-labelledby="alert-dialog-title"
+                        aria-describedby="alert-dialog-description"
                     >
-                        <CloseIcon />
-                    </IconButton>
-                    <DialogContent dividers>
-                        <Grid container spacing={3} >
-                            <Grid item md={8} sm={12}>
-                                <img
-                                    height="250"
-                                    width="300"
-                                    src="https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"
-                                    alt="item"
-                                />
+                        <DialogTitle sx={{ m: 0, p: 2 }} id="customized-dialog-title">
+                            {item?.name}
+                        </DialogTitle>
+                        <IconButton
+                            aria-label="close"
+                            onClick={handleClose}
+                            sx={{
+                                position: 'absolute',
+                                right: 8,
+                                top: 8,
+                                color: (theme) => theme.palette.grey[500],
+                            }}
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                        <DialogContent>
+                            <Grid container spacing={3} >
+                                <Grid item md={8} sm={12}>
+                                    <img
+                                        height="250"
+                                        width="300"
+                                        src={item?.image}
+                                        alt="item"
+                                    />
+                                </Grid>
+                                <Grid item md={4} sm={12}>
+                                    <Typography variant="caption" color="secondary" component='div'>
+                                        Units
+                                    </Typography>
+                                    <Typography variant="h6" color="secondary" component='div'>
+                                        {item?.quantity} Units
+                                    </Typography>
+                                    <Typography variant="caption" color="secondary" component='div'>
+                                        Price
+                                    </Typography>
+                                    <Typography variant="h6" color="secondary" component='div'>
+                                        Ksh {item?.price}
+                                    </Typography>
+                                    <Typography variant="caption" color="secondary" component='div'>
+                                        Tags
+                                    </Typography>
+                                    <Stack
+                                        direction="row" spacing={1}
+                                        mt={1}
+                                    >
+                                        <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label={item?.category} size="small" sx={{ fontSize: "0.6rem" }} />
+                                    </Stack>
+                                </Grid>
                             </Grid>
-                            <Grid item md={4} sm={12}>
-                                <Typography variant="caption" color="secondary" component='div'>
-                                    Units
-                                </Typography>
-                                <Typography variant="h6" color="secondary" component='div'>
-                                    3 Units
-                                </Typography>
-                                <Typography variant="caption" color="secondary" component='div'>
-                                    Price
-                                </Typography>
-                                <Typography variant="h6" color="secondary" component='div'>
-                                    Ksh 100
-                                </Typography>
-                                <Typography variant="caption" color="secondary" component='div'>
-                                    Tags
-                                </Typography>
-                                <Stack
-                                    direction="row" spacing={1}
-                                    mt={1}
-                                >
-                                    <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label="Electronics" size="small" sx={{ fontSize: "0.6rem" }} />
-                                    <Chip icon={<LocalOfferIcon />} label="White" size="small" sx={{ fontSize: "0.6rem" }} />
-                                </Stack>
-                            </Grid>
-                        </Grid>
-                        <DialogContentText id="alert-dialog-description">
-                            Let Google help apps determine location. This means sending anonymous
-                            location data to Google, even when no apps are running.
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions sx={{ py: 1, px: 3 }}>
-                        <Button fullWidth variant="outlined" onClick={handleClose}>Edit Item</Button>
-                        <Button fullWidth variant="contained" type="submit" autoFocus startIcon={<SendIcon />}>
-                            Request Order
-                        </Button>
-                    </DialogActions>
-                </Dialog>
-            )}
+                            <DialogContentText>
+                                {item?.description}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions sx={{ py: 1, px: 3 }}>
+                            <Button fullWidth variant="outlined" onClick={handleClose}>Delete Item</Button>
+                            <Button fullWidth variant="contained" type="submit"  startIcon={<SendIcon />}>
+                                Request Order
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
+                )
+            }
             <Grid container spacing={3} sx={{ mb: 6, p: 1 }}>
-                {[1, 2, 3, 4].map((listing: any, index) => (
-                    <Grid key={index} item md={3} sm={12}>
-                        <Card sx={{ minWidth: isSmallScreen ? 320 : 270, borderRadius: "1rem", cursor: "pointer", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }} onClick={handleClickOpen}>
+                {products.map((item: any, index) => (
+                    <Grid key={item._id} item md={3} sm={12}>
+                        <Card
+                            sx={{ minWidth: isSmallScreen ? 320 : 270, borderRadius: "1rem", cursor: "pointer", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }} onClick={() => handleClickOpen(item)} >
                             <CardMedia
                                 component="img"
-                                height="200"
+                                height="100%"
+                                width="100%"
                                 image="https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"
                                 alt="item"
                             />
                             <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "center", mb: -1 }} >
+                                <Typography sx={{ fontSize: "0.5rem", color: "grey" }} component='div'>
+                                    {item.sku}
+                                </Typography>
                                 <Typography variant="h6" color="primary" component='div'>
-                                    PS5 Digital
+                                    {item.name}
                                 </Typography>
 
                                 <Stack
@@ -314,35 +352,23 @@ export default function Items() {
                                     divider={<Divider orientation="vertical" flexItem />}
                                 >
                                     <Typography variant="body2" color="secondary" component='div'>
-                                        3 Units
+                                        {item.quantity} Units
                                     </Typography>
                                     <Typography variant="body2" color="secondary" component='div'>
-                                        Ksh 100
+                                        Ksh {item.price}
                                     </Typography>
                                 </Stack>
                                 <Stack
                                     direction="row" spacing={1}
                                     mt={1}
                                 >
-                                    <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label="Electronics" size="small" sx={{ fontSize: "0.6rem" }} />
-                                    <Chip icon={<LocalOfferIcon />} label="White" size="small" sx={{ fontSize: "0.6rem" }} />
+                                    <Chip icon={<LocalOfferIcon sx={{ fontSize: 5 }} />} label={item.category} size="small" sx={{ fontSize: "0.6rem" }} />
                                 </Stack>
                             </CardContent>
-                            <CardActions disableSpacing >
-                                <Button
-                                    color="primary"
-                                    variant="outlined"
-                                    fullWidth
-                                    size="small"
-                                    onClick={handleClickOpen}
-                                >
-                                    View Item
-                                </Button>
-                            </CardActions>
                         </Card>
                     </Grid>
                 ))}
             </Grid>
-        </Container>
+        </Container >
     );
 }

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { DataGrid, GridToolbar, GridActionsCellItem, GridColDef, GridValueGetterParams, GridRenderCellParams } from '@mui/x-data-grid';
-import { Box,  Grid,Chip, Typography } from '@mui/material';
+import { Box, Grid, Chip, Typography, ListItem, Avatar, ListItemAvatar, ListItemText } from '@mui/material';
 import { useLocalStorage } from 'react-use';
 // import { renderViewsComponent } from "./viewsChip";
 import { timeConverter } from "../utility";
@@ -19,87 +19,44 @@ export default function Table(props: Props) {
         pageSize: 5,
         page: 0,
     });
-    // const [open, setOpen] = React.useState(false);
-    // const [data, setData] = React.useState<any | undefined>();
-
-
-    // const deleteUser = async (id: any) => {
-    //     if (user?.id) {
-    //         const { error } = await supabase
-    //             .from('jokes')
-    //             .delete()
-    //             .eq('id', id)
-
-    //         if (error) {
-    //             toast.error(`Joke ${id} failed to delete`)
-    //             console.log(error)
-    //         } else {
-    //             toast.success(`Joke ${id} successfully deleted`)
-    //         }
-    //     } else {
-    //         toast.error(`Please login to delete`)
-    //     }
-
-    // };
-
-    // const deleteJoke = React.useCallback(
-    //     (id: GridRowId) => () => {
-    //         deleteUser(id)
-    //     },
-    //     [],
-    // );
-
-    // const editLikes = React.useCallback(
-    //     (params: any, type: string) => () => {
-    //         upvoteJoke(params, type)
-    //     },
-    //     [],
-    // );
-
-
-    // const upvoteJoke = async (params: any, type: string) => {
-    //     const { error } = await supabase
-    //         .from('jokes')
-    //         .update({ likes: type === "liked" ? params.row.likes + 1 : type === "disliked" && params.row.likes !== 0 || null ? params.row.likes - 1 : 0 })
-    //         .eq('id', params.id)
-
-    //     if (error) {
-    //         toast.error(`Failed to ${type} ${params.row.Category}`)
-    //         console.log(error)
-    //     } else {
-    //         toast.success(` You ${type} a ${params.row.Category} successfully`)
-    //     }
-
-    // };
 
     const columns = useMemo<GridColDef<any>[]>(
         () => [
             {
                 field: "name",
                 sortable: false,
-                flex: 3
+                headerName: "Item",
+                flex: 3,
+                renderCell: (params: GridRenderCellParams<any>) => (
+                    <ListItem>
+                        <ListItemAvatar>
+                            <Avatar variant="square" src={params.row.image || "https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"} sx={{ borderRadius: "10px" }} />
+                        </ListItemAvatar>
+                        <ListItemText primary={params.row.name} secondary={<Typography variant="caption" sx={{fontSize:"0.6rem"}} color="text.secondary">{params.row.sku}</Typography>} />
+                    </ListItem>
+                ),
             },
-            { field: "sku", flex: 3, sortable: false },
-            { field: "quantity", flex: 1, sortable: false },
+            // { field: "sku", flex: 3, sortable: false },
+            // { field: "quantity", flex: 1, sortable: false },
             { field: "price", flex: 1, sortable: false },
 
 
-            {
-                field: "createdAt",
-                sortable: false,
-                headerName: "Created At",
-                flex: 2,
-                valueGetter: (params: GridValueGetterParams) => {
-                    return timeConverter(params.row.created_at) || "N/A"
-                },
-            },
+            // {
+            //     field: "createdAt",
+            //     sortable: false,
+            //     headerName: "created at",
+            //     flex: 2,
+            //     valueGetter: (params: GridValueGetterParams) => {
+            //         return timeConverter(params.row.created_at) || "N/A"
+            //     },
+            // },
             {
                 field: "category",
                 sortable: false,
                 flex: 2,
                 renderCell: (params: GridRenderCellParams<any>) => (
                     // <Rating size="small" name="read-only" value={params.row.likes} readOnly />
-                    <Chip label={params.row.category}/>
+                    <Chip size="small" label={params.row.category} />
 
                 ),
             },
@@ -108,12 +65,12 @@ export default function Table(props: Props) {
                 type: 'actions',
                 width: 10,
                 getActions: (params: any) => [
-        
+
                     <GridActionsCellItem
-                        icon={<SentimentVeryDissatisfiedIcon  color="warning" />}
+                        icon={<SentimentVeryDissatisfiedIcon color="warning" />}
                         label="Delete"
                         showInMenu={true}
-                        // onClick={deleteJoke(params.id)}
+                    // onClick={deleteJoke(params.id)}
                     />
                 ],
             },
@@ -143,12 +100,12 @@ export default function Table(props: Props) {
     // };
 
     return (
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12} md={8}>
             <Typography sx={{ mb: 1.5, fontWeight: "bold" }}>
-              Recent Items
+                Recent Items
             </Typography>
-        <Box sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }}>
-            {/* {open &&
+            <Box sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }}>
+                {/* {open &&
                 <ActionDialog
                     open={open}
                     handleClose={handleClose}
@@ -156,7 +113,7 @@ export default function Table(props: Props) {
                     method={method}
                 />
             } */}
-            {/* {error ? (
+                {/* {error ? (
                 <Paper>You have no bookings at the moment</Paper>
             ) : ( */}
                 <DataGrid
@@ -178,7 +135,7 @@ export default function Table(props: Props) {
                     slotProps={filterProps}
                     sx={{ borderRadius: "1rem", bgcolor: 'background.paper' }}
                 />
-        </Box>
+            </Box>
         </Grid>
     );
 }
