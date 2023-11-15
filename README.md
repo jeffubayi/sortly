@@ -1,6 +1,12 @@
 ## SORTLY
 
 Inventory management system to automate item stocks in/out
+![](https://play-lh.googleusercontent.com/UcG5EK1w58uA6VGigJ201NboD3s5PLcBunVMwP718C0PNDsv9ui8nIjLCDlsroUr2A)
+### Live Deployments
+
+Frontend :https://sortly-inventory.vercel.app
+
+Backend : https://sortly.onrender.com
 
 ### Tools
 
@@ -16,38 +22,28 @@ Inventory management system to automate item stocks in/out
 
 1. Copy `env` secret files
 ```
- cd backend
+ cd backend &&  cd frontend
 
     touch env
 
     copy env.example to env
 
- cd frontend
-
-    touch env.local
-
-    copy env.example to env.local
 ```
 
 2. Run the App
 ```
- cd backend
+ cd backend &&  cd frontend
 
     npm install
 
     npm start
 
- cd frontend
-
-   npm install
-
-   npm run dev
+```
+3. View the App locally
 
 ```
+ frontend : http://localhost:3000
 
-
-### Live Deployments
-
-Frontend :https://sortly-inventory.vercel.app
-
-Backend : https://sortly.onrender.com
+ backend : http://localhost:4000
+ 
+```
