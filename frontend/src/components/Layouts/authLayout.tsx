@@ -3,9 +3,10 @@ import { Box } from "@mui/material";
 
 interface Props {
     children: React.ReactNode;
+    title:string;
 }
 
-export default function AppLayout({ children }: Props) {
+export default function AppLayout({ children,title }: Props) {
     return (
         <Grid container component="main" sx={{ height: '100vh' }} >
             <CssBaseline />
@@ -24,7 +25,7 @@ export default function AppLayout({ children }: Props) {
                     >
                     </Avatar>
                     <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                        {'Login to your account'}
+                        {title}
                     </Typography>
                 </Box>
                 {children}
