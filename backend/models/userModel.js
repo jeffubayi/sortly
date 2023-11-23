@@ -36,8 +36,8 @@ const userSchema = mongoose.Schema({
   },
   role: {
     type: String,
-    required: [true, 'Please add a name'],
-    default:"bio"
+    required: [true, 'Please add a role'],
+    default:"individual"
   }
 }, {
   timestamps: true,

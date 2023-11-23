@@ -54,8 +54,8 @@ export default function HomeLayout({ children }: Props) {
                                 <Button onClick={() => navigate("/contact-us")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
                                 Contact us
                                 </Button>
-                                <Button onClick={() => navigate("/auth/login")} variant="text" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
-                                    Sign up
+                                <Button onClick={() => navigate("/auth/login")} variant="outlined" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
+                                    Sign In
                                 </Button>
                                 <Button onClick={() => navigate("/auth/register")} variant="contained" size="small" sx={{ my: 1, mx: 1.5, borderRadius: "0.5rem", px: 4 }}>
                                     {isSmallScreen ? "login" : "Start a free trial"}

@@ -17,7 +17,7 @@ const initialState = {
 // Create new product 
 export const createProduct = createAsyncThunk(
   "products/create",
-  async (formData, thunkAPI) => {
+  async (formData:any, thunkAPI) => {
     try {
       return await productService.createProduct(formData)
     } catch (error: any) {

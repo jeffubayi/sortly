@@ -51,8 +51,8 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const { _id, name, email, photo, phone, bio } = user;
-    res.status(201).json({ _id, name, email, photo, phone, bio, token });
+    const { _id, name, email, photo, phone, bio,role } = user;
+    res.status(201).json({ _id, name, email, photo, phone, bio,role, token });
   } else {
     res.status(400);
     throw new Error("Invalid user data");
@@ -93,8 +93,8 @@ const loginUser = asyncHandler(async (req, res) => {
   }
 
   if (user && passwordIsCorrect) {
-    const { _id, name, email, photo, phone, bio } = user;
-    res.status(200).json({ _id, name, email, photo, phone, bio, token });
+    const { _id, name, email, photo, phone, bio,role } = user;
+    res.status(200).json({ _id, name, email, photo, phone, bio, role,token });
   } else {
     res.status(400);
     throw new Error("Invalid Email or Password!");
@@ -118,8 +118,8 @@ const getuser = asyncHandler(async (req, res) => {
   const user = await User.findById(req.user._id);
 
   if (user) {
-    const { _id, name, email, photo, phone, bio } = user;
-    res.status(200).json({ _id, name, email, photo, phone, bio });
+    const { _id, name, email, photo, phone, bio,role } = user;
+    res.status(200).json({ _id, name, email, photo, phone, bio,role });
   } else {
     res.status(400);
     throw new Error("User not found!");
