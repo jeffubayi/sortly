@@ -39,6 +39,7 @@ export default function Register() {
                 await dispatch(SET_LOGIN(true))
                 await dispatch(SET_NAME(data?.name))
                 await dispatch(SET_USER(data))
+                localStorage.setItem('user_email',data?.email)
                 if (data.bio === "bio") {
                     navigate('/auth/onboarding');
                 } else {

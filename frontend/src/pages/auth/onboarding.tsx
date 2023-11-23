@@ -1,12 +1,13 @@
 
 import * as React from 'react';
-import {  Grid, Box, TextField, Divider, StepLabel, Step, Paper, Stepper, Button, MenuItem } from '@mui/material';
+import { Grid, Box, Stack, Typography, Chip, TextField, Alert, Divider, StepLabel, Step, Paper, Stepper, Button, MenuItem, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import toast from 'react-hot-toast';
 // import { Formik, Field, Form } from 'formik';
 // import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-import Alert from '@mui/material/Alert';
+// import '../static/css/otp.css'
+import OTPInput, { ResendOTP } from 'otp-input-react';
 
 import { selectName } from '../../redux/features/auth/authSlice';
 import { updateUser } from "../../services/authService";
@@ -18,7 +19,9 @@ export default function Login() {
     const [activeStep, setActiveStep] = React.useState(0);
     const [formData, setFormData] = React.useState<any>({});
     const [formErrors] = React.useState<any>({});
+    const [otp, setOtp] = React.useState('');
     const userName = useSelector(selectName)
+    const email = localStorage.getItem('user_email')
     const dispatch = useDispatch()
     const navigate = useNavigate();
 
@@ -117,6 +120,31 @@ export default function Login() {
                         <Alert icon={false} severity="success" sx={{ mt: 2 }}>
                             Thanks  {userName},well use your answers to create a more personalized onboarding experience for you
                         </Alert>
+                        <ListItem alignItems="flex-start"
+                            secondaryAction={<Chip size="small" label={formData.role} />
+                            } >
+                            <ListItemAvatar>
+                                <Avatar alt="user" src={formData.image} />
+                            </ListItemAvatar>
+                            <ListItemText
+                                primary={
+                                    <Typography color="text.primary">
+                                         {formData.phone}
+                                    </Typography>
+                                }
+                                secondary={
+                                    <Typography
+                                    sx={{ display: 'inline' }}
+                                    component="span"
+                                    variant="caption"
+                                    color="text.primary"
+                                >
+                                    {formData.bio}
+                                </Typography>
+                                }
+                            />
+                        </ListItem>
+                       
                         <Box sx={{ px: 5, py: 4 }}>
                             {/* <Box sx={{ flex: '1 1 auto', }} /> */}
                             <Button onClick={handleReset} variant="contained" fullWidth>Go to dashboard</Button>
@@ -200,21 +228,50 @@ export default function Login() {
                             {activeStep === 2 && (
                                 <>
                                     <Divider orientation="horizontal" flexItem sx={{ my: 4 }}>
-                                        Please verify your account
+                                        Please enter the OTP to verify your account
                                     </Divider>
                                     <Grid container
                                         rowSpacing={2}
                                         columnSpacing={{ xs: 2, sm: 3, md: 5 }}
                                     >
                                         <Grid item xs={12}>
-                                            <TextField
+                                            {/* <TextField
                                                 fullWidth
                                                 type='email'
                                                 placeholder='Enter OTP'
                                                 label="Enter OTP"
                                                 name='otp'
                                                 helperText='A message was sent to your phone'
-                                            />
+                                            /> */}
+                                            {/* <OtpInput
+                                                value={otp}
+                                                onChange={setOtp}
+                                                numInputs={4}
+                                                placeholder='A message was sent to your phone,please type in the digits'
+                                                renderSeparator={<span>-</span>}
+                                                renderInput={(props) => <input {...props} />}
+                                            /> */}
+                                            <Stack justifyContent="center" alignItems="center" spacing="2" direction="column" mb={1} >
+
+                                                <OTPInput
+                                                    value={otp}
+                                                    onChange={setOtp}
+                                                    autoFocus
+                                                    OTPLength={4}
+                                                    otpType="number"
+                                                    disabled={false}
+                                                    inputStyles={{
+                                                        "marginInline": "5px",
+                                                        width: "45px",
+                                                        height: "45px",
+                                                        // borderRadius:"10px"
+                                                    }}
+                                                    inputClassName="appearance-none border rounded-lg leading-tight focus:outline-none focus:border-2 focus:border-red-900"
+                                                />
+                                                <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.65rem" }}>A code has been sent to {email || formData?.phone}</Typography>
+                                                <Button variant="text">Resend OTP</Button>
+                                                {/* <ResendOTP onResendClick={() => console.log("Resend clicked")} /> */}
+                                            </Stack>
                                         </Grid>
 
 
@@ -223,7 +280,7 @@ export default function Login() {
                             )}
                             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, justifyContent: "center" }}>
                                 <Button onClick={handleNext} variant="contained" fullWidth>
-                                    {activeStep === steps.length - 1 ? 'Finish' : 'Continue'}
+                                    {activeStep === steps.length - 1 ? 'Verify' : 'Continue'}
                                 </Button>
                             </Box>
                         </Paper>

@@ -6,7 +6,7 @@ import {
   Grid,
   Typography
 } from "@mui/material";
-import TagsList from "../../components/serviceList";
+import TagsList from "../../components/itemList";
 import useRedirectLoggedOutUser from "../../utility/useRedirectLoggedOutUser";
 import { useDispatch, useSelector } from "react-redux";
 import ItemsList from "../../components/table";

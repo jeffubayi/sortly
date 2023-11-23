@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Grid, Container, Button, Card, ListItem, List, CardContent, useMediaQuery, CardMedia, Chip, Divider, Stack, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, TextField, Autocomplete } from '@mui/material';
+import { Grid, Container, Button, Card, ListItem, List, CardContent, useMediaQuery, CardMedia, Chip, Divider, Stack, Typography, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 // import { useRouter } from 'next/router';
 import IconButton from '@mui/material/IconButton';
@@ -19,7 +19,7 @@ import { AppDispatch, RootState } from "../../redux/store";
 import { Formik, Form, FormikHelpers } from 'formik';
 import * as Yup from 'yup';
 import { InputField } from '../../components/TextFields';
-import { createProduct, selectIsLoading } from '../../redux/features/product/productSlice';
+import { createProduct } from '../../redux/features/product/productSlice';
 import toast from 'react-hot-toast';
 
 const validationSchema = Yup.object({
@@ -89,8 +89,6 @@ export default function Items() {
 
     return (
         <Container maxWidth="lg" component="main" sx={{ p: 2 }} >
-            {/* <PageTitle title='Items' /> */}
-            {/* <Title title="New Item" collection="All Items" icon={<FilterListIcon />} /> */}
             <List sx={{ borderRadius: "0.5rem", mb: 1, bgcolor: 'background.paper', boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }}>
                 <ListItem alignItems="flex-start" secondaryAction={
                     <>
@@ -141,23 +139,21 @@ export default function Items() {
                             quantity: 0,
                             price: 0,
                             description: "",
-                            image: "https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"
+                            image: ""
                         }}
                         onSubmit={async (
                             values: any,
                             { setSubmitting }: FormikHelpers<any>
                         ) => {
                             try {
-                                alert(JSON.stringify(values, null, 2));
-                                // console.log(`data`, ...values, `sku`, generateSKU(values?.category));
                                 const productData = {
                                     ...values,
                                     sku: generateSKU(values.category)
                                 }
-                                console.log(`New Item`,productData)
-                                // await dispatch(createProduct(productData))
-                                toast.success(`Item ${values?.name} Added`)
+                                // alert(JSON.stringify(productData , null, 2));
+                                await dispatch(createProduct(productData))
                                 setSubmitting(false);
+                                handleCloseNew()
                             } catch (error: any) {
                                 toast.error(error.message)
                             }
@@ -281,16 +277,16 @@ export default function Items() {
                             <CloseIcon />
                         </IconButton>
                         <DialogContent>
-                            <Grid container spacing={3} >
-                                <Grid item md={8} sm={12}>
+                            <Grid container spacing={2} >
+                                <Grid item md={7} sm={12}>
                                     <img
-                                        height="250"
-                                        width="300"
+                                        height="200"
+                                        width="100%"
                                         src={item?.image}
                                         alt="item"
                                     />
                                 </Grid>
-                                <Grid item md={4} sm={12}>
+                                <Grid item md={5} sm={12}>
                                     <Typography variant="caption" color="secondary" component='div'>
                                         Units
                                     </Typography>
@@ -336,7 +332,8 @@ export default function Items() {
                                 component="img"
                                 height="100%"
                                 width="100%"
-                                image="https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"
+                                image={item.image}
+                                // image="https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"
                                 alt="item"
                             />
                             <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "center", mb: -1 }} >

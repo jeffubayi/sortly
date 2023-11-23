@@ -1,7 +1,7 @@
 import React from 'react';
 import { Container } from '@mui/material';
 
-import TagsList from "../../components/serviceList";
+import TagsList from "../../components/itemList";
 
 export default function Contracts() {
     return (
