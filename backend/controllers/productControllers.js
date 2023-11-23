@@ -5,7 +5,7 @@ const { response } = require("express");
 const cloudinary = require("cloudinary").v2;
 
 const createProduct = asyncHandler(async (req, res) => {
-  const { name, sku, category, quantity, price, description } = req.body;
+  const { name, sku, category, quantity, price, description ,image} = req.body;
 
   //Validation
   if (!name || !category || !quantity || !sku || !price || !description) {
@@ -44,7 +44,7 @@ const createProduct = asyncHandler(async (req, res) => {
     quantity,
     price,
     description,
-    image: fileData,
+    image,
   });
   res.status(201).json(product);
 });

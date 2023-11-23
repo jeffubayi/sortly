@@ -67,27 +67,27 @@ function App() {
 
         {/* auth routes */}
         <Route path="/auth/login" element={
-          <AuthLayout>
+          <AuthLayout title='Login to your account'>
             <Login />
           </AuthLayout>
         } />
         <Route path="/auth/register" element={
-          <AuthLayout>
+          <AuthLayout title='Register for an account'>
             <Register />
           </AuthLayout>
         } />
         <Route path="/auth/forgot" element={
-          <AuthLayout>
+          <AuthLayout title='Forgot Password'>
             <Forgot />
           </AuthLayout>
         } />
         <Route path="/auth/reset-password/:resetToken" element={
-          <AuthLayout>
+          <AuthLayout title='Password Reset'>
             <Reset />
           </AuthLayout>
         } />
         <Route path="/auth/onboarding" element={
-          <AuthLayout>
+          <AuthLayout title='Set up your account'>
             <Onboarding />
           </AuthLayout>
         } />
