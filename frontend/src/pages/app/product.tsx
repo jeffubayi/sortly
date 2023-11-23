@@ -40,7 +40,7 @@ export default function Items() {
     const [open, setOpen] = React.useState(false);
     const [openNew, setOpenNew] = React.useState(false);
     const [item, setItem] = React.useState<any>({});
-    const { products, isLoading, isError, message } = useSelector((state: RootState) => state.product);
+    const { products,  isError, message } = useSelector((state: RootState) => state.product);
 
     const generateSKU = (category: any) => {
         const letter = category.slice(0, 3).toUpperCase();
@@ -79,13 +79,13 @@ export default function Items() {
         }
     }, [isLoggedIn, isError, message, dispatch])
 
-    const top100Films = [
-        { title: 'Electronics', year: 1994 },
-        { title: 'Clothing', year: 1972 },
-        { title: 'Repair', year: 1974 },
-        { title: 'Cosmetics', year: 2008 },
-        { title: 'Food', year: 1957 },
-        { title: "Furniture", year: 1993 }]
+    // const top100Films = [
+    //     { title: 'Electronics', year: 1994 },
+    //     { title: 'Clothing', year: 1972 },
+    //     { title: 'Repair', year: 1974 },
+    //     { title: 'Cosmetics', year: 2008 },
+    //     { title: 'Food', year: 1957 },
+    //     { title: "Furniture", year: 1993 }]
 
     return (
         <Container maxWidth="lg" component="main" sx={{ p: 2 }} >
@@ -150,7 +150,6 @@ export default function Items() {
                                     ...values,
                                     sku: generateSKU(values.category)
                                 }
-                                // alert(JSON.stringify(productData , null, 2));
                                 await dispatch(createProduct(productData))
                                 setSubmitting(false);
                                 handleCloseNew()

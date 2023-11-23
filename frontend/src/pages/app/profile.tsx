@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Brightness4Icon from '@mui/icons-material/Brightness4';
-import { Grid, Box, List, ListItem, ListItemIcon, ListItemText, ListSubheader, Paper, Switch, Tab, Tabs, Typography, Container, Avatar, Badge, Card, IconButton, Skeleton, Stack, Tooltip } from '@mui/material';
+import { Grid, Box, List, ListItem, Chip, ListItemIcon, ListItemText, ListSubheader, Paper, Switch, Tab, Tabs, Typography, Container, Avatar, Badge, Card, IconButton, Skeleton, Stack, Tooltip } from '@mui/material';
 // import toast from 'react-hot-toast';
 import { useDispatch, useSelector } from "react-redux";
 
@@ -78,7 +78,7 @@ export default function About() {
 
     const [profile, setProfile] = useState<userDataValues>(userData)
     // const [isLoading, setIsLoading] = useState(false)
-    console.log('PROF', profile,userData)
+    console.log('PROF', profile, userData)
 
     useEffect(() => {
         // setIsLoading(true)
@@ -154,9 +154,7 @@ export default function About() {
                                 {profile?.name}
                             </Typography>
                                 : <Skeleton width="60%" />}
-                            {profile ? <Typography variant="subtitle2" color="text.secondary" component="div">
-                                {userData?.role}
-                            </Typography>
+                            {profile ? <Chip label={userData?.role} />
                                 : <Skeleton />}
                         </Stack>
                     </Card>

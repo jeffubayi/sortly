@@ -7,7 +7,7 @@ import toast from 'react-hot-toast';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 // import '../static/css/otp.css'
-import OTPInput, { ResendOTP } from 'otp-input-react';
+import OTPInput from 'otp-input-react';
 
 import { selectName } from '../../redux/features/auth/authSlice';
 import { updateUser } from "../../services/authService";
@@ -58,6 +58,8 @@ export default function Login() {
 
     const handleSignUp = async () => {
         try {
+            console.log(`USER`,formData)
+            localStorage.setItem('user_image',formData.photo)
             const data = await updateUser(formData);
             if (data !== undefined) {
                 await dispatch(SET_USER({ ...formData, name: userName }))
@@ -124,7 +126,7 @@ export default function Login() {
                             secondaryAction={<Chip size="small" label={formData.role} />
                             } >
                             <ListItemAvatar>
-                                <Avatar alt="user" src={formData.image} />
+                                <Avatar alt="user" src={formData.photo} />
                             </ListItemAvatar>
                             <ListItemText
                                 primary={
@@ -196,9 +198,9 @@ export default function Login() {
                                         <Grid item xs={12} >
                                             <TextField
                                                 fullWidth
-                                                placeholder='Type add image'
-                                                label="Profile Image"
-                                                name="image"
+                                                placeholder='Paste image url'
+                                                label="Profile Photo"
+                                                name="photo"
                                                 onChange={handleChange}
                                             />
                                         </Grid>
