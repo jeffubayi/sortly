@@ -1,29 +1,130 @@
 
-import * as React from 'react';
+import React, { useState } from 'react';
 import { Grid, Box, Stack, Typography, Chip, TextField, Alert, Divider, StepLabel, Step, Paper, Stepper, Button, MenuItem, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import toast from 'react-hot-toast';
+import { MuiFileInput } from 'mui-file-input'
+import { MuiOtpInput } from 'mui-one-time-password-input'
+import AttachFileIcon from '@mui/icons-material/AttachFile'
 // import { Formik, Field, Form } from 'formik';
 // import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
-// import '../static/css/otp.css'
-import OTPInput from 'otp-input-react';
 
 import { selectName } from '../../redux/features/auth/authSlice';
 import { updateUser } from "../../services/authService";
 import { SET_USER } from "../../redux/features/auth/authSlice"
+import axios from 'axios';
+
 
 const steps = ['Select Role', 'Personal Details', 'Verify Account'];
 
 export default function Login() {
-    const [activeStep, setActiveStep] = React.useState(0);
-    const [formData, setFormData] = React.useState<any>({});
-    const [formErrors] = React.useState<any>({});
-    const [otp, setOtp] = React.useState('');
-    const userName = useSelector(selectName)
-    const email = localStorage.getItem('user_email')
     const dispatch = useDispatch()
     const navigate = useNavigate();
+    const userName = useSelector(selectName)
+    const [activeStep, setActiveStep] = useState(0);
+    const [formData, setFormData] = useState<any>({});
+    const [formErrors] = useState<any>({});
+    const [file, setFile] = useState(null);
+    const [otp, setOtp] = useState('');
+    const [expiryCounter, setExpiryCounter] = useState(300);
+    const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+    const [resendLoading, setResendLoading] = useState(false);
+    const [otpError, setOtpError] = useState("");
+    // const [uploading, setUploading] = useState(false);
+    // const [avatar, setAvatar] = useState("");
+
+
+    const handleChangeOTP = (newValue: string) => {
+        setOtp(newValue)
+    }
+
+
+    function fancyTimeFormat(duration: number) {
+        // Hours, minutes and seconds
+        var hrs = ~~(duration / 3600);
+        var mins = ~~((duration % 3600) / 60);
+        var secs = ~~duration % 60;
+
+        // Output like "1:01" or "4:03:59" or "123:03:59"
+        var ret = "";
+
+        if (hrs > 0) {
+            ret += "" + hrs + ":" + (mins < 10 ? "0" : "");
+        }
+
+        ret += "" + mins + ":" + (secs < 10 ? "0" : "");
+        ret += "" + secs;
+        return ret;
+    }
+
+    const handleVerify = async () => {
+        if (!otp) {
+            setOtpError("Enter otp");
+        } else {
+            setOtpError("");
+            setIsUpdateLoading(true);
+            toast.success("Phone number verified!");
+            navigate("/dashboard");
+            try {
+                const updateResponse = await axios({
+                    method: "post",
+                    // url: backendUrl + `auth/otp/sms/verify`,
+                    data: {
+                        guess: otp,
+                    },
+                    headers: {
+                        Authorization: "Bearer " + localStorage.getItem("otpToken"),
+                    },
+                });
+                // setIsUpdateLoading(false);
+                console.log("updateResponse");
+                console.log(updateResponse);
+
+                if (updateResponse.data.success) {
+                    const refetchUserData = await axios({
+                        method: "get",
+                        // url: `users/${user._id}`,
+                        data: "",
+                    });
+
+                    // dispatch(updateUserDetails(refetchUserData.data.data));
+                    if (refetchUserData.data.success) {
+                        toast.success("Phone number verified!");
+                        navigate("/dashboard");
+                    }
+                }
+            } catch (error) {
+                setIsUpdateLoading(false);
+                // console.log(error.response.data.message);
+                // toast.error(error.response.data.message);
+            }
+        }
+    };
+
+    const sendOTP = async () => {
+        const recipients = {
+            recipients: ['+254707748115'],
+        };
+        if (otp) {
+            setResendLoading(true);
+            const otpResponse = await axios({
+                method: "post",
+                url: "auth/otp/sms",
+                data: recipients,
+            });
+            setResendLoading(false);
+            console.log("otpResponse from sending otp");
+            console.log(otpResponse.data);
+            if (otpResponse.data.success) {
+                localStorage.setItem("otpToken", otpResponse.data.data.otpToken);
+                toast.success("Kindly check your phone for the OTP");
+                setExpiryCounter(300);
+            } else {
+                toast.error("OTP could not be send, try again later");
+            }
+        }
+    };
 
     // const handleBack = () => {
     //     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -38,6 +139,31 @@ export default function Login() {
             ...formData,
             [event.target.name]: event.target.value,
         });
+    };
+
+    const handleFileChange = (event: any) => {
+        // setUploading(true)
+        const files = event.target.files;
+        const myFiles = Array.from(files);
+        // const filePath = `profile/${myFiles[0]?.name}`
+        // const storageRef = ref(storage, filePath);
+        // upload image to firebase
+        // uploadBytes(storageRef, myFiles[0]).then((snapshot) => {
+        // get uploaded image
+        // const bucketRef = ref(storage, snapshot.metadata.fullPath);
+        // getDownloadURL(bucketRef)
+        // .then(async (avatar) => {
+        // update user profile
+        // setAvatar(avatar);
+        // setUploading(false)
+        toast.success("Profile photo  successfully updated");
+
+        //     dispatch(updateUser({
+        //         ...user,
+        //         avatar,
+        //     }))
+        // })
+        // });
     };
 
     // const validationSchema = Yup.object({
@@ -58,8 +184,8 @@ export default function Login() {
 
     const handleSignUp = async () => {
         try {
-            console.log(`USER`,formData)
-            localStorage.setItem('user_image',formData.photo)
+            console.log(`USER`, formData)
+            localStorage.setItem('user_image', formData.photo)
             const data = await updateUser(formData);
             if (data !== undefined) {
                 await dispatch(SET_USER({ ...formData, name: userName }))
@@ -131,22 +257,22 @@ export default function Login() {
                             <ListItemText
                                 primary={
                                     <Typography color="text.primary">
-                                         {formData.phone}
+                                        {formData.phone}
                                     </Typography>
                                 }
                                 secondary={
                                     <Typography
-                                    sx={{ display: 'inline' }}
-                                    component="span"
-                                    variant="caption"
-                                    color="text.primary"
-                                >
-                                    {formData.bio}
-                                </Typography>
+                                        sx={{ display: 'inline' }}
+                                        component="span"
+                                        variant="caption"
+                                        color="text.primary"
+                                    >
+                                        {formData.bio}
+                                    </Typography>
                                 }
                             />
                         </ListItem>
-                       
+
                         <Box sx={{ px: 5, py: 4 }}>
                             {/* <Box sx={{ flex: '1 1 auto', }} /> */}
                             <Button onClick={handleReset} variant="contained" fullWidth>Go to dashboard</Button>
@@ -196,12 +322,18 @@ export default function Login() {
                                         columnSpacing={{ xs: 2, sm: 3, md: 5 }}
                                     >
                                         <Grid item xs={12} >
-                                            <TextField
+
+                                            <MuiFileInput value={file}
+                                                onChange={handleFileChange}
+                                                label="Profile photo (optional)"
                                                 fullWidth
-                                                placeholder='Paste image url'
-                                                label="Profile Photo"
-                                                name="photo"
-                                                onChange={handleChange}
+                                                placeholder="Insert profile image"
+                                                InputProps={{
+                                                    inputProps: {
+                                                        accept: '.png, .jpeg'
+                                                    },
+                                                    startAdornment: <AttachFileIcon />
+                                                }}
                                             />
                                         </Grid>
                                         <Grid item xs={12} >
@@ -237,42 +369,27 @@ export default function Login() {
                                         columnSpacing={{ xs: 2, sm: 3, md: 5 }}
                                     >
                                         <Grid item xs={12}>
-                                            {/* <TextField
-                                                fullWidth
-                                                type='email'
-                                                placeholder='Enter OTP'
-                                                label="Enter OTP"
-                                                name='otp'
-                                                helperText='A message was sent to your phone'
-                                            /> */}
-                                            {/* <OtpInput
-                                                value={otp}
-                                                onChange={setOtp}
-                                                numInputs={4}
-                                                placeholder='A message was sent to your phone,please type in the digits'
-                                                renderSeparator={<span>-</span>}
-                                                renderInput={(props) => <input {...props} />}
-                                            /> */}
-                                            <Stack justifyContent="center" alignItems="center" spacing="2" direction="column" mb={1} >
+                                            <Stack
+                                                direction="column"
+                                                justifyContent="center"
+                                                alignItems="center"
+                                                p={2}
+                                                spacing={1}>
 
-                                                <OTPInput
-                                                    value={otp}
-                                                    onChange={setOtp}
-                                                    autoFocus
-                                                    OTPLength={4}
-                                                    otpType="number"
-                                                    disabled={false}
-                                                    inputStyles={{
-                                                        "marginInline": "5px",
-                                                        width: "45px",
-                                                        height: "45px",
-                                                        // borderRadius:"10px"
-                                                    }}
-                                                    inputClassName="appearance-none border rounded-lg leading-tight focus:outline-none focus:border-2 focus:border-red-900"
-                                                />
-                                                <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.65rem" }}>A code has been sent to {email || formData?.phone}</Typography>
-                                                <Button variant="text">Resend OTP</Button>
-                                                {/* <ResendOTP onResendClick={() => console.log("Resend clicked")} /> */}
+                                                <Box px={6}>
+                                                    <MuiOtpInput length={4} TextFieldsProps={{ size: 'small' }} value={otp} onChange={handleChangeOTP} />
+                                                </Box>
+                                                <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.65rem" }}>We have sent a One Time Password to your phone <strong>{formData?.phone}</strong></Typography>
+                                                {expiryCounter < 0 ? (
+                                                    <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.8rem" }}> You can resend after <b> {fancyTimeFormat(expiryCounter)}</b></Typography>) : (
+                                                    <Button onClick={sendOTP} variant="text">{resendLoading ? "Sending OTP..." : "Resend OTP"}</Button>
+                                                )}
+
+                                                <Button onClick={handleVerify}  fullWidth variant="contained">
+                                                    {!isUpdateLoading ? (
+                                                        "Verify Account"
+                                                    ) : ("Verifying..")}
+                                                </Button>
                                             </Stack>
                                         </Grid>
 
@@ -281,9 +398,11 @@ export default function Login() {
                                 </>
                             )}
                             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, justifyContent: "center" }}>
-                                <Button onClick={handleNext} variant="contained" fullWidth>
-                                    {activeStep === steps.length - 1 ? 'Verify' : 'Continue'}
-                                </Button>
+                                {activeStep < 2 && (
+                                    <Button onClick={handleNext} variant="contained" fullWidth>
+                                        Continue
+                                    </Button>
+                                )}
                             </Box>
                         </Paper>
                     </>

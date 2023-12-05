@@ -40,7 +40,7 @@ export default function Items() {
     const [open, setOpen] = React.useState(false);
     const [openNew, setOpenNew] = React.useState(false);
     const [item, setItem] = React.useState<any>({});
-    const { products,  isError, message } = useSelector((state: RootState) => state.product);
+    const { products, isLoading, isError, message } = useSelector((state: RootState) => state.product);
 
     const generateSKU = (category: any) => {
         const letter = category.slice(0, 3).toUpperCase();
