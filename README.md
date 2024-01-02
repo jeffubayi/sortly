@@ -1,6 +1,8 @@
 ## SORTLY
 
-Inventory management system to automate item stocks in/out
+Inventory management system that allows businesses to manage their sales, orders, and track performance
+
+
 ![](https://play-lh.googleusercontent.com/UcG5EK1w58uA6VGigJ201NboD3s5PLcBunVMwP718C0PNDsv9ui8nIjLCDlsroUr2A)
 ### Live Deployments
 
