@@ -100,7 +100,7 @@ export default function Table(props: Props) {
     // };
 
     return (
-        <Grid item xs={12} md={8}>
+        <Grid item xs={12} md={12}>
             <Typography sx={{ mb: 1.5, fontWeight: "bold" }}>
                 Recent Items
             </Typography>

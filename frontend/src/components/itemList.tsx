@@ -22,51 +22,51 @@ const services = [
         logo: "",
         description: "in-stock/out-of-stock"
     },
-    {
-        name: "Condition Tags",
-        logo: "",
-        description: "condition of item"
-    },
-    {
-        name: "Expiry Tags",
-        logo: "",
-        description: "item durability"
-    },
-    {
-        name: "Supplier Tags",
-        logo: "",
-        description: "item quality"
-    },
-    {
-        name: "Weight or Size Tags",
-        logo: "",
-        description: " weight or size of an item"
-    },
-    {
-        name: "Cost Tags",
-        logo: "",
-        description: "cost of the item"
-    },
-    {
-        name: "Security Tags",
-        logo: "",
-        description: "high-security of an item"
-    },
-    {
-        name: "Warranty Tags",
-        logo: "",
-        description: " warranty claims & repairs"
-    },
-    {
-        name: "Serial Number Tags",
-        logo: "",
-        description: "unique id to each item"
-    },
+    // {
+    //     name: "Condition Tags",
+    //     logo: "",
+    //     description: "condition of item"
+    // },
+    // {
+    //     name: "Expiry Tags",
+    //     logo: "",
+    //     description: "item durability"
+    // },
+    // {
+    //     name: "Supplier Tags",
+    //     logo: "",
+    //     description: "item quality"
+    // },
+    // {
+    //     name: "Weight or Size Tags",
+    //     logo: "",
+    //     description: " weight or size of an item"
+    // },
+    // {
+    //     name: "Cost Tags",
+    //     logo: "",
+    //     description: "cost of the item"
+    // },
+    // {
+    //     name: "Security Tags",
+    //     logo: "",
+    //     description: "high-security of an item"
+    // },
+    // {
+    //     name: "Warranty Tags",
+    //     logo: "",
+    //     description: " warranty claims & repairs"
+    // },
+    // {
+    //     name: "Serial Number Tags",
+    //     logo: "",
+    //     description: "unique id to each item"
+    // },
 ]
 
 export default function ServiceList() {
     return (
-        <Grid item xs={12} md={12}>
+        <Grid item xs={12} md={6}>
             <Typography sx={{ mb: 4, fontWeight: "bold" }}>
                 Item Tags
             </Typography>

@@ -19,6 +19,9 @@ import Onboarding from "./pages/auth/onboarding";
 import Dashboard from "./pages/app/dashboard";
 import Product from "./pages/app/product";
 import Tags from "./pages/app/tags";
+import Search from "./pages/app/search";
+import Notification from "./pages/app/notification";
+import Help from "./pages/app/help";
 import Reports from "./pages/app/reports";
 import Profile from "./pages/app/profile";
 import Layout from './components/Layouts/appLayout'
@@ -106,6 +109,30 @@ function App() {
           element={
             <Layout>
               <Product />
+            </Layout>
+          }
+        />
+        <Route
+          path="/search"
+          element={
+            <Layout>
+              <Search />
+            </Layout>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <Layout>
+              <Notification />
+            </Layout>
+          }
+        />
+        <Route
+          path="/help"
+          element={
+            <Layout>
+              <Help />
             </Layout>
           }
         />
