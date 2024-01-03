@@ -17,12 +17,12 @@ export default function Reports() {
                             size="small"
                             sx={{ borderRadius: "0.4rem" }}
                         >
-                            Filter
+                            Contact us
                         </Button>
                     </>
                 }>
                     <Typography color="text.primary" variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                        Analytics
+                        Help
                     </Typography>
 
                 </ListItem>

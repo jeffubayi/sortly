@@ -3,7 +3,7 @@ import { Grid, Container ,Button,  ListItem, List,Typography } from '@mui/materi
 import FilterListIcon from '@mui/icons-material/Add';
 import useRedirectLoggedOutUser from "../../utility/useRedirectLoggedOutUser";
 
-export default function Reports() {
+export default function Notification() {
     useRedirectLoggedOutUser('/auth/login')
     return (
         <Container maxWidth="md" component="main" sx={{ p: 2 }} >
@@ -17,12 +17,12 @@ export default function Reports() {
                             size="small"
                             sx={{ borderRadius: "0.4rem" }}
                         >
-                            Filter
+                            mark as read
                         </Button>
                     </>
                 }>
                     <Typography color="text.primary" variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                        Analytics
+                        Notifications
                     </Typography>
 
                 </ListItem>

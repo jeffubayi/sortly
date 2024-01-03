@@ -88,7 +88,7 @@ export default function Items() {
     //     { title: "Furniture", year: 1993 }]
 
     return (
-        <Container maxWidth="lg" component="main" sx={{ p: 2 }} >
+        <Container maxWidth="md" component="main" sx={{ p: 2 }} >
             <List sx={{ borderRadius: "0.5rem", mb: 1, bgcolor: 'background.paper', boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }}>
                 <ListItem alignItems="flex-start" secondaryAction={
                     <>

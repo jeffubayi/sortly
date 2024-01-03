@@ -39,14 +39,14 @@ export default function Dashboard() {
   return (
     <React.Fragment>
       {/* <PageTitle title="Dashboard" /> */}
-      <Container maxWidth="lg" component="main" sx={{ mb: 8, mt: 4 }}>
+      <Container maxWidth="md" component="main" sx={{ mb: 8, mt: 4 }}>
         <Typography sx={{ mb: 1.5, fontWeight: "bold" }}>
           Inventory Summary
         </Typography>
         <Grid container spacing={3}>
           <SummaryCard products={products} />
           <ItemsList rows={products ?? []} loading={isLoading} />
-          <TagsList />
+          {/* <TagsList /> */}
         </Grid>
       </Container>
     </React.Fragment>
