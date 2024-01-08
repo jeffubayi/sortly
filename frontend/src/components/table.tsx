@@ -30,7 +30,7 @@ export default function Table(props: Props) {
                 renderCell: (params: GridRenderCellParams<any>) => (
                     <ListItem>
                         <ListItemAvatar>
-                            <Avatar variant="square" src={params.row.image || "https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"} sx={{ borderRadius: "10px" }} />
+                            <Avatar variant="square" src={ "https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/image/rDtN98Qoishumwih/close-red-box_7Jk_cG_thumb.jpg"} sx={{ borderRadius: "10px" }} />
                         </ListItemAvatar>
                         <ListItemText primary={params.row.name} secondary={<Typography variant="caption" sx={{fontSize:"0.6rem"}} color="text.secondary">{params.row.sku}</Typography>} />
                     </ListItem>

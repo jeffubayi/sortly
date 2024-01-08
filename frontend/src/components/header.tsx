@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {  Badge, Divider, ListItemIcon, List, Menu, MenuItem, IconButton, Button, Avatar, Box, Toolbar, Tooltip, Typography, ListItem, ListItemAvatar, ListItemText, Card, CardHeader } from '@mui/material';
+import { Badge, Divider, ListItemIcon, List, Menu, MenuItem, IconButton, Button, Avatar, Box, Toolbar, Tooltip, Typography, ListItem, ListItemAvatar, ListItemText, Card, CardHeader } from '@mui/material';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Settings from '@mui/icons-material/ManageAccounts';
 import { useSelector, useDispatch } from 'react-redux';
@@ -22,7 +22,6 @@ import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import LocalOfferIcon from '@mui/icons-material/LocalOffer';
 import AssessmentRoundedIcon from '@mui/icons-material/AssessmentRounded';
 import { useNavigate, useLocation } from "react-router-dom";
-import NotificationsList from "./notifications"
 import { SET_NAME, SET_USER } from '../redux/features/auth/authSlice'
 import { logoutUser, getUser, getLoginStatus } from '../services/authService';
 import { SET_LOGIN, selectUser, selectName } from '../redux/features/auth/authSlice';
@@ -30,6 +29,8 @@ import { SET_LOGIN, selectUser, selectName } from '../redux/features/auth/authSl
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
 const drawerWidth = 180;
+
+
 
 const openedMixin = (theme: Theme): CSSObject => ({
     width: drawerWidth,
@@ -113,12 +114,7 @@ export default function Navbar() {
     const isSmallScreen = useMediaQuery("(max-width: 600px)");
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const openIt = Boolean(anchorEl);
-    const [notificationEl, setNotificationAnchorEl] = React.useState<null | HTMLElement>(null);
-    const openNotifications = Boolean(notificationEl);
     const currentRoute: string = location.pathname;
-    const [state, setState] = React.useState({
-        right: false,
-    });
     const [open, setOpen] = React.useState(false);
 
     const handleDrawerOpen = () => {
@@ -137,12 +133,6 @@ export default function Navbar() {
         loginStatus();
     }, [dispatch]);
 
-    // const handleNotificationsClick = (event: React.MouseEvent<HTMLElement>) => {
-    //     setNotificationAnchorEl(event.currentTarget);
-    // };
-    const handleNotificationsClose = () => {
-        setNotificationAnchorEl(null);
-    };
 
     React.useEffect(() => {
         // setIsLoading(true)
@@ -155,33 +145,6 @@ export default function Navbar() {
         }
         getUserData()
     }, [dispatch])
-
-
-
-
-    const toggleDrawer =
-        (anchor: Anchor, openIt: boolean) =>
-            (event: React.KeyboardEvent | React.MouseEvent) => {
-                if (
-                    event.type === 'keydown' &&
-                    ((event as React.KeyboardEvent).key === 'Tab' ||
-                        (event as React.KeyboardEvent).key === 'Shift')
-                ) {
-                    return;
-                }
-
-                setState({ ...state, [anchor]: openIt });
-            };
-
-    // React.useEffect(() => {
-    //     const fetchOrders = async () => {
-    //         const { data } = await supabase.from('profiles').select(`account`).eq('id', user?.id).single();
-    //         setAccount(data?.account)
-
-    //     }
-
-    //     fetchOrders()
-    // }, [user?.id])
 
 
     const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -198,6 +161,24 @@ export default function Navbar() {
         await dispatch(SET_LOGIN(false));
         navigate(`/auth/login`)
     }
+
+    const appPages = [
+        { url: "dashboard", page: "Dashboard", icon: < DashboardIcon fontSize="small" sx={{ color: currentRoute === "/dashboard" ? "text.secondary" : "text.primary" }} /> },
+        { url: "items", page: "Products", icon: < ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary" }} /> },
+        { url: "search", page: "Search", icon: < SearchIcon fontSize="small" sx={{ color: currentRoute === "/search" ? "text.secondary" : "text.primary" }} /> },
+        { url: "tags", page: "Category", icon: < LocalOfferIcon fontSize="small" sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }} /> },
+        { url: "reports", page: "Reports", icon: < AssessmentRoundedIcon fontSize="small" sx={{ color: currentRoute === "/reports" ? "text.secondary" : "text.primary" }} /> }
+    ]
+
+    const settingsPages = [
+        {
+            url: "notifications", page: "Notifications", icon: <Badge badgeContent={1} color="error">
+                <NotificationsIcon fontSize="small" sx={{ color: currentRoute === "/notifications" ? "text.secondary" : "text.primary" }} />
+            </Badge>
+        },
+        { url: "profile", page: "Profile", icon: < SettingsIcon fontSize="small" sx={{ color: currentRoute === "/profile" ? "text.secondary" : "text.primary" }} /> },
+        { url: "help", page: "Help", icon: < ContactSupportIcon fontSize="small" sx={{ color: currentRoute === "/help" ? "text.secondary" : "text.primary" }} /> },
+    ]
 
 
     return (
@@ -218,56 +199,15 @@ export default function Navbar() {
                             ...(open && { display: 'none' }),
                         }}
                     >
-                        <MenuIcon />
-                    </IconButton>
-                    <Box onClick={() => navigate('/')} sx={{ display: "flex", gap: 1, flexGrow: 1 }}>
                         <Avatar
-                            variant="square"
-                            sx={{ height: "2.4rem", width: "6.6rem", cursor: "pointer" }}
-                            src="https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/231061/Sortly_Logo.png"
+                            // variant="square"
+                            sx={{ cursor: "pointer" }}
+                            src="https://play-lh.googleusercontent.com/80VbneEtlj_6cfGajIbCBzMlBl-8J1f6nC7KmC5vjnCMUavL_mUGVGu9N_Bp0z4bWVE"
                         />
-                    </Box >
-                    {/* {!isSmallScreen && (
-                        <Box sx={{ flexGrow: 1, display: 'flex', alignItems: 'center', textAlign: 'center' }}>
-                            <MenuItem onClick={() => navigate("/dashboard")} sx={{ color: currentRoute === "/dashboard" ? "text.secondary" : "text.primary" }}>
-                                <ListItemIcon>
-                                    <DashboardRoundedIcon fontSize="small" sx={{ color: currentRoute === "/dashboard" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                Dashboard
-                            </MenuItem>
-                            <MenuItem onClick={() => navigate("/items")} sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
-                                <ListItemIcon>
-                                    <ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                Items
-                            </MenuItem>
-                            <MenuItem onClick={() => navigate("/tags")} sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }}>
-                                <ListItemIcon>
-                                    <LocalOfferIcon fontSize="small" sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                Tags
-                            </MenuItem>
-                            <MenuItem onClick={() => navigate("/reports")} sx={{ color: currentRoute === "/reports" ? "text.secondary" : "text.primary", borderBottom: '1px solid text.secondary' }}>
-                                <ListItemIcon>
-                                    <AssessmentRoundedIcon fontSize="small" sx={{ color: currentRoute === "/reports" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                Reports
-                            </MenuItem>
+                    </IconButton>
+                    <Box sx={{ display: "flex", gap: 1, flexGrow: 1 }} />
 
-                        </Box>
-                    )} */}
                     <div>
-                        {/* <IconButton
-                            size="large"
-                            aria-label="show 17 new notifications"
-                            color="inherit"
-                            onClick={toggleDrawer("right", true)}
-                        >
-                            <Badge badgeContent={1} color="error">
-                                <NotificationsIcon fontSize="small" />
-                            </Badge>
-                        </IconButton> */}
-
                         <Tooltip title="Profile" >
                             <IconButton
 
@@ -276,7 +216,7 @@ export default function Navbar() {
                                 color="inherit"
                                 onClick={handleClick}
                             >
-                                <Avatar src={userData.photo || "avatarr.png"} alt={userName} sx={{ height: "2.3rem", width: "2.3rem" }} />
+                                <Avatar src={userData.photo || "avatarr.png"} alt={userName} />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -330,7 +270,7 @@ export default function Navbar() {
                             </MenuItem>
                             <MenuItem onClick={() => navigate("/messages")} >
                                 <ListItemIcon>
-                                    <NotificationsIcon  fontSize="small" color="secondary" />
+                                    <NotificationsIcon fontSize="small" color="secondary" />
                                 </ListItemIcon>
                                 Notifications
                             </MenuItem>
@@ -350,247 +290,77 @@ export default function Navbar() {
                         </Menu>
                     </div>
                 </Toolbar>
-                {/* <Menu
-                    id="fade-menu"
-                    MenuListProps={{
-                        'aria-labelledby': 'fade-button',
-                    }}
-                    anchorEl={notificationEl}
-                    open={openNotifications}
-                    onClose={handleNotificationsClose}
-                    onClick={handleNotificationsClose}
-                    TransitionComponent={Fade}
-                    transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                    anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
-                >
-                    <Stack direction="row" spacing={1} p={1} justifyContent="space-between">
-                        <div>
-                            <Typography sx={{ fontWeight: "bold" }}>Notifications</Typography>
-                        </div>
-                        <div onClick={handleClose}>
-                            <Typography>mark as read</Typography>
-                        </div>
-                    </Stack>
-
-                    <Divider />
-                    <NotificationsList />
-                </Menu> */}
             </AppBar>
             <Toolbar />
-            {/* <Drawer
-                anchor='right'
-                open={state.right}
-                onClose={toggleDrawer('right', false)}
-            >
-                <Box
-                    sx={{ width: 380 }}
-                    role="presentation"
-                >
-                    <Card >
-                        <CardHeader
-                            avatar={
-                                <IconButton aria-label="settings" onClick={toggleDrawer("right", false)}>
-                                    <CloseIcon />
-                                </IconButton>
-                            }
-                            title={<Typography
-                                variant="subtitle1"
-                                color="inherit"
-                                noWrap
-                            >
-                                Notifications
-                            </Typography>}
-                            subheader="You have 1 Unread messages"
-                        />
-                    </Card>
-                    <NotificationsList />
-                </Box>
-            </Drawer> */}
             {!isSmallScreen && (
-                <Drawer PaperProps={{style: {border: 'none'}}} variant="permanent" open={open} >
+                <Drawer PaperProps={{ style: { border: 'none' } }} variant="permanent" open={open} >
                     <DrawerHeader>
+                        {open && (
+                            <Box onClick={() => navigate('/')} >
+                                <Avatar
+                                    variant="square"
+                                    sx={{ height: "2.4rem", width: "6.6rem", cursor: "pointer" }}
+                                    src="https://dka575ofm4ao0.cloudfront.net/pages-transactional_logos/retina/231061/Sortly_Logo.png"
+                                />
+                            </Box >
+                        )}
                         <IconButton onClick={handleDrawerClose}>
                             {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                         </IconButton>
                     </DrawerHeader>
                     <Box sx={{ display: "flex", gap: 1, flexGrow: 1 }} >
-                    <List >
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/dashboard")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    < DashboardIcon fontSize="small" sx={{ color: currentRoute === "/dashboard" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Dashboard" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/items")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <ShoppingCartIcon fontSize="small" sx={{ color: currentRoute === "/items" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Products" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/search")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <SearchIcon fontSize="small" sx={{ color: currentRoute === "/search" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Search" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/tags")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <LocalOfferIcon fontSize="small" sx={{ color: currentRoute === "/tags" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Tags" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/reports")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <AssessmentRoundedIcon fontSize="small" sx={{ color: currentRoute === "/reports" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Reports" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-
-                    </List>
+                        <List >
+                            {appPages.map((route) => (
+                                <ListItem disablePadding sx={{ display: 'block', color: currentRoute === `/${route.url}` ? "text.secondary" : "text.primary" }}>
+                                    <ListItemButton
+                                        onClick={() => navigate(`/${route.url}`)}
+                                        sx={{
+                                            minHeight: 48,
+                                            bgColor: currentRoute === `/${route.url}` ? "text.secondary" : "text.primary",
+                                            justifyContent: open ? 'initial' : 'center',
+                                            px: 2.5,
+                                        }}
+                                    >
+                                        <ListItemIcon
+                                            sx={{
+                                                minWidth: 0,
+                                                mr: open ? 3 : 'auto',
+                                                justifyContent: 'center',
+                                            }}
+                                        >
+                                            <Tooltip placement="right-start" title={route.url} >{route.icon}</Tooltip>
+                                        </ListItemIcon>
+                                        <ListItemText primary={route.page} sx={{ opacity: open ? 1 : 0, color: currentRoute === `/${route.url}` ? "text.secondary" : "text.primary" }} />
+                                    </ListItemButton>
+                                </ListItem>
+                            ))}
+                        </List>
                     </Box>
                     <List >
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/notifications")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <Badge badgeContent={1} color="error">
-                                        <NotificationsIcon fontSize="small" sx={{ color: currentRoute === "/notifications" ? "text.secondary" : "text.primary" }} />
-                                    </Badge>
+                        {settingsPages.map((route) => (
+                            <ListItem disablePadding sx={{ display: 'block' }}>
 
-                                </ListItemIcon>
-                                <ListItemText primary="Notification" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/profile")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
+                                <ListItemButton
+                                    onClick={() => navigate(`/${route.url}`)}
                                     sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
+                                        minHeight: 48,
+                                        justifyContent: open ? 'initial' : 'center',
+                                        px: 2.5,
                                     }}
                                 >
-
-                                    <SettingsIcon fontSize="small" sx={{ color: currentRoute === "/profile" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Profile" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                        <ListItem disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                onClick={() => navigate("/help")}
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    <ContactSupportIcon fontSize="small" sx={{ color: currentRoute === "/help" ? "text.secondary" : "text.primary" }} />
-                                </ListItemIcon>
-                                <ListItemText primary="Help" sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
+                                    <ListItemIcon
+                                        sx={{
+                                            minWidth: 0,
+                                            mr: open ? 3 : 'auto',
+                                            justifyContent: 'center',
+                                        }}
+                                    >
+                                        <Tooltip   placement="right-start" title={route.url} >{route.icon}</Tooltip>
+                                    </ListItemIcon>
+                                    <ListItemText primary={route.page} sx={{ opacity: open ? 1 : 0, color: currentRoute === `/${route.url}` ? "text.secondary" : "text.primary" }} />
+                                </ListItemButton>
+                            </ListItem>
+                        ))}
                         <ListItem disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 onClick={handleLogout}
@@ -615,7 +385,8 @@ export default function Navbar() {
                         </ListItem>
                     </List>
                 </Drawer>
-            )}
-        </React.Fragment>
+            )
+            }
+        </React.Fragment >
     );
 }

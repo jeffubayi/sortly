@@ -281,7 +281,7 @@ export default function Items() {
                                     <img
                                         height="200"
                                         width="100%"
-                                        src={item?.image}
+                                        src="https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/image/rDtN98Qoishumwih/close-red-box_7Jk_cG_thumb.jpg"
                                         alt="item"
                                     />
                                 </Grid>
@@ -324,15 +324,15 @@ export default function Items() {
             }
             <Grid container spacing={3} sx={{ mb: 6, p: 1 }}>
                 {products.map((item: any, index) => (
-                    <Grid key={item._id} item md={3} sm={12}>
+                    <Grid key={item._id} item md={4} sm={12}>
                         <Card
-                            sx={{ minWidth: isSmallScreen ? 320 : 270, borderRadius: "1rem", cursor: "pointer", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }} onClick={() => handleClickOpen(item)} >
+                            sx={{ minWidth: isSmallScreen ? 320 : 200, borderRadius: "1rem", cursor: "pointer", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }} onClick={() => handleClickOpen(item)} >
                             <CardMedia
                                 component="img"
                                 height="100%"
                                 width="100%"
-                                image={item.image}
-                                // image="https://media.direct.playstation.com/is/image/psdglobal/PS5-console-front"
+                                // image={item.image}
+                                image="https://dm0qx8t0i9gc9.cloudfront.net/thumbnails/image/rDtN98Qoishumwih/close-red-box_7Jk_cG_thumb.jpg"
                                 alt="item"
                             />
                             <CardContent sx={{ display: "flex", flexDirection: "column", justifyContent: "center", mb: -1 }} >

@@ -8,7 +8,7 @@ const theme = createTheme({
     warning: { main: "#c1004b" },
     divider: "#c8ccd0",
     text: {
-      primary: "#000",
+      primary: "#909aa2",
       secondary: "#DD2B3A",
     },
     background: {
