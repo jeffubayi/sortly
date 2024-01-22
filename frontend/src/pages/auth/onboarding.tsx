@@ -1,10 +1,12 @@
 
 import React, { useState } from 'react';
-import { Grid, Box, Stack, Typography, Chip, TextField, Alert, Divider, StepLabel, Step, Paper, Stepper, Button, MenuItem, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
+import { Grid, Card, Box, CardHeader, Radio, Stack, Typography, Chip, TextField, Alert, Divider, StepLabel, Step, Paper, Stepper, Button, MenuItem, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import toast from 'react-hot-toast';
 import { MuiFileInput } from 'mui-file-input'
 import { MuiOtpInput } from 'mui-one-time-password-input'
 import AttachFileIcon from '@mui/icons-material/AttachFile'
+import axios from 'axios';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 // import { Formik, Field, Form } from 'formik';
 // import * as Yup from 'yup';
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,7 +15,8 @@ import { useNavigate } from "react-router-dom";
 import { selectName } from '../../redux/features/auth/authSlice';
 import { updateUser } from "../../services/authService";
 import { SET_USER } from "../../redux/features/auth/authSlice"
-import axios from 'axios';
+import Person from "../../images/person.png"
+
 
 
 const steps = ['Select Role', 'Personal Details', 'Verify Account'];
@@ -31,6 +34,11 @@ export default function Login() {
     const [isUpdateLoading, setIsUpdateLoading] = useState(false);
     const [resendLoading, setResendLoading] = useState(false);
     const [otpError, setOtpError] = useState("");
+    const [selectedValue, setSelectedValue] = React.useState('business');
+
+    const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedValue(event.target.value);
+    };
     // const [uploading, setUploading] = useState(false);
     // const [avatar, setAvatar] = useState("");
 
@@ -197,6 +205,10 @@ export default function Login() {
         }
     };
 
+    const handleBack = () => {
+        setActiveStep((prevActiveStep) => prevActiveStep - 1);
+    };
+
     const handleNext = (event: any) => {
         if (activeStep === steps.length - 1) {
             toast.success("post db")
@@ -236,7 +248,7 @@ export default function Login() {
                         } = {};
                         return (
                             <Step key={label} {...stepProps}>
-                                <StepLabel {...labelProps}>{label}</StepLabel>
+                                <StepLabel {...labelProps}></StepLabel>
                             </Step>
                         );
                     })}
@@ -281,33 +293,55 @@ export default function Login() {
                 ) : (
                     <>
                         <Alert icon={false} severity="success" sx={{ mt: 2 }}>
-                            Hi {userName},  for a more tailored onboarding experience <br></br>Please answer the following questions and we'll do the rest
+                            Hi  {userName}, Help us personalize your experience by sharing a few details about your needs
                         </Alert>
-                        <Paper sx={{ px: 2 }} elevation={0}>
+                        <Box sx={{ px: 2 }}>
                             {activeStep === 0 && (
                                 <div>
                                     <Divider orientation="horizontal" flexItem sx={{ my: 4 }}>
-                                        Which of the following best describes you?
+                                        What will you use sortly for?
                                     </Divider>
                                     <Grid container
                                         rowSpacing={2}
                                         columnSpacing={{ xs: 2, sm: 3, md: 5 }}
                                     >
                                         <Grid item xs={12} >
-                                            <TextField
-                                                id="outlined-select-currency"
-                                                select
-                                                name="role"
-                                                label="Select your Role"
-                                                fullWidth
-                                                error={formErrors.role && formErrors.role}
-                                                onChange={handleChange}
-                                                helperText={formErrors.role && formErrors.role}
-                                            >
-                                                <MenuItem value="individual">Individual</MenuItem>
-                                                <MenuItem value="business">Business</MenuItem>
-                                            </TextField>
+                                            <Card>
+                                                <CardHeader
+                                                    avatar={
+                                                        <Avatar src="https://previews.123rf.com/images/asmati/asmati1610/asmati161000225/63831570-store-sign-illustration-white-icon-on-red-circle.jpg" />
+                                                    }
+                                                    action={
+                                                        <Radio
+                                                            checked={selectedValue === 'business'}
+                                                            onChange={handleChange}
+                                                            value="business"
+                                                        />
+                                                    }
+                                                    title={<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Business</Typography>}
+                                                    subheader={<Typography variant="caption">I want to track inventory at my workplace</Typography>}
+                                                />
+                                            </Card>
                                         </Grid>
+                                        <Grid item xs={12} >
+                                            <Card>
+                                                <CardHeader
+                                                    avatar={
+                                                        <Avatar src={Person} />
+                                                    }
+                                                    action={
+                                                        <Radio
+                                                            checked={selectedValue === 'personal'}
+                                                            onChange={handleChange}
+                                                            value="personal"
+                                                        />
+                                                    }
+                                                    title={<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Personal</Typography>}
+                                                    subheader={<Typography variant="caption">I want to organize stuff in my house</Typography>}
+                                                />
+                                                <MenuItem></MenuItem>                                              </Card>
+                                        </Grid>
+
                                     </Grid>
                                 </div>
 
@@ -315,47 +349,44 @@ export default function Login() {
                             {activeStep === 1 && (
                                 <>
                                     <Divider orientation="horizontal" flexItem sx={{ my: 4 }}>
-                                        Please fill in your personal details
+                                        A bit about your business
                                     </Divider>
                                     <Grid container
                                         rowSpacing={2}
                                         columnSpacing={{ xs: 2, sm: 3, md: 5 }}
                                     >
                                         <Grid item xs={12} >
-
-                                            <MuiFileInput value={file}
-                                                onChange={handleFileChange}
-                                                label="Profile photo (optional)"
-                                                fullWidth
-                                                placeholder="Insert profile image"
-                                                InputProps={{
-                                                    inputProps: {
-                                                        accept: '.png, .jpeg'
-                                                    },
-                                                    startAdornment: <AttachFileIcon />
-                                                }}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} >
                                             <TextField
                                                 fullWidth
-                                                placeholder='Type your phone number'
-                                                label="Phone number"
-                                                name="phone"
-                                                onChange={handleChange}
-                                            />
-                                        </Grid>
-                                        <Grid item xs={12} >
-                                            <TextField
-                                                fullWidth
-                                                multiline
-                                                rows={2}
-                                                placeholder='Tell us about yourself'
-                                                label="Bio"
+                                                placeholder='Type company name'
+                                                label="Company Name"
                                                 name="bio"
                                                 onChange={handleChange}
                                             />
                                         </Grid>
+                                        <Grid item xs={12} >
+                                            <TextField
+                                                fullWidth
+                                                label="Industry"
+                                                name="industry"
+                                                onChange={handleChange}
+                                            />
+                                        </Grid>
+                                        <Grid item xs={12} >
+                                            <TextField
+                                                fullWidth
+                                                select
+                                                label="What are you using Sortly to track"
+                                                name="industry"
+                                                onChange={handleChange}
+                                            >
+                                                <MenuItem value="IT"> IT Equipments</MenuItem>
+
+                                                <MenuItem value="cosmetics">Cosmetics</MenuItem>
+                                            </TextField>
+                                        </Grid>
+
+
                                     </Grid>
                                 </>
                             )}
@@ -379,13 +410,13 @@ export default function Login() {
                                                 <Box px={6}>
                                                     <MuiOtpInput length={4} TextFieldsProps={{ size: 'small' }} value={otp} onChange={handleChangeOTP} />
                                                 </Box>
-                                                <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.65rem" }}>We have sent a One Time Password to your phone <strong>{formData?.phone}</strong></Typography>
+                                                <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.65rem" }}>We have sent a One Time Password to your phone and email <strong>{formData?.phone}</strong></Typography>
                                                 {expiryCounter < 0 ? (
                                                     <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.8rem" }}> You can resend after <b> {fancyTimeFormat(expiryCounter)}</b></Typography>) : (
                                                     <Button onClick={sendOTP} variant="text">{resendLoading ? "Sending OTP..." : "Resend OTP"}</Button>
                                                 )}
 
-                                                <Button onClick={handleVerify}  fullWidth variant="contained">
+                                                <Button onClick={handleVerify} fullWidth variant="contained">
                                                     {!isUpdateLoading ? (
                                                         "Verify Account"
                                                     ) : ("Verifying..")}
@@ -399,12 +430,23 @@ export default function Login() {
                             )}
                             <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2, justifyContent: "center" }}>
                                 {activeStep < 2 && (
-                                    <Button onClick={handleNext} variant="contained" fullWidth>
-                                        Continue
-                                    </Button>
+                                    <>
+                                        <Button
+                                            variant="outlined"
+                                            disabled={activeStep === 0}
+                                            onClick={handleBack}
+                                            fullWidth
+                                            sx={{ mr: 1 }}
+                                        >
+                                            Back
+                                        </Button>
+                                        <Button onClick={handleNext} variant="contained" fullWidth endIcon={<ArrowForwardIcon />}>
+                                            Next
+                                        </Button>
+                                    </>
                                 )}
                             </Box>
-                        </Paper>
+                        </Box>
                     </>
                 )}
             </Box>

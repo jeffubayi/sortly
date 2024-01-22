@@ -62,7 +62,7 @@ export default function Login() {
                                     <Stack direction="row" spacing={3}>
                                         <LogoButton
                                             icon={Google}
-                                            label="Google"
+                                            label="Sign in with Google"
                                             handleClick={handleGoogleLogin}
                                         />
 
@@ -96,7 +96,7 @@ export default function Login() {
                                                 type="submit"
                                                 disabled={isSubmitting}
                                                 variant="contained"
-                                                label="Login to continue"
+                                                label="Sign in "
                                             />
                                         </Grid>
 
@@ -112,7 +112,7 @@ export default function Login() {
                                             <Typography>
                                                 Don't have an account?
                                             </Typography>
-                                            <Button fullWidth onClick={() => navigate('/auth/register')}>Register</Button>
+                                            <Button fullWidth onClick={() => navigate('/auth/register')}>Sign Up</Button>
                                         </Grid>
                                         <Grid item xs={12}>
                                             <Box onClick={() => navigate('/auth/reset-password')} >

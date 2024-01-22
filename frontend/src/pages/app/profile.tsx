@@ -15,6 +15,7 @@ import { InputField } from "../../components/TextFields";
 import { updateUser } from "../../services/authService";
 import { Formik, Form } from 'formik';
 import EditIcon from '@mui/icons-material/AddAPhoto';
+import Person from "../../images/person.png"
 
 const validationSchema = Yup.object({
     name: Yup.string().required('User name is required'),
@@ -146,7 +147,7 @@ export default function About() {
                                     </Tooltip>
                                 }
                             >
-                                {profile ? (<Avatar alt="user" sx={{ width: "6.5rem", height: "6.5rem", m: 1 }} src={profile.photo} />) : (
+                                {profile ? (<Avatar alt="user" sx={{ width: "6.5rem", height: "6.5rem", m: 1 }} src={Person || profile.photo} />) : (
                                     <Skeleton animation="wave" variant="circular" sx={{ width: "7rem", height: "7rem", m: 1 }} />
                                 )}
                             </Badge>
@@ -165,9 +166,9 @@ export default function About() {
 
                         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                             <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                                <Tab iconPosition="start" label="Personal details" {...a11yProps(0)} sx={{ textTransform: 'capitalize' }} />
-                                <Tab iconPosition="start" label="Appearance" {...a11yProps(2)} sx={{ textTransform: 'capitalize' }} />
-                                <Tab iconPosition="start" label="Invites" {...a11yProps(1)} sx={{ textTransform: 'capitalize' }} />
+                                <Tab iconPosition="start" label="Profile" {...a11yProps(0)} sx={{ textTransform: 'capitalize' }} />
+                                <Tab iconPosition="start" label="Preferences" {...a11yProps(2)} sx={{ textTransform: 'capitalize' }} />
+                                <Tab iconPosition="start" label="Company Details" {...a11yProps(1)} sx={{ textTransform: 'capitalize' }} />
                             </Tabs>
                         </Box>
                         <TabPanel value={value} index={0}>
