@@ -306,7 +306,7 @@ export default function Login() {
                                         columnSpacing={{ xs: 2, sm: 3, md: 5 }}
                                     >
                                         <Grid item xs={12} >
-                                            <Card>
+                                            <Card elevation={selectedValue === 'business' ? 3 : 0}>
                                                 <CardHeader
                                                     avatar={
                                                         <Avatar src="https://previews.123rf.com/images/asmati/asmati1610/asmati161000225/63831570-store-sign-illustration-white-icon-on-red-circle.jpg" />
@@ -314,17 +314,17 @@ export default function Login() {
                                                     action={
                                                         <Radio
                                                             checked={selectedValue === 'business'}
-                                                            onChange={handleChange}
+                                                            onChange={handleRoleChange}
                                                             value="business"
                                                         />
                                                     }
                                                     title={<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Business</Typography>}
-                                                    subheader={<Typography variant="caption">I want to track inventory at my workplace</Typography>}
+                                                    subheader={<Typography variant="caption" color={selectedValue === 'business' ? "primary" :"text.primary"}>I want to track inventory at my workplace</Typography>}
                                                 />
                                             </Card>
                                         </Grid>
                                         <Grid item xs={12} >
-                                            <Card>
+                                            <Card  elevation={selectedValue === 'personal' ? 3 : 0}>
                                                 <CardHeader
                                                     avatar={
                                                         <Avatar src={Person} />
@@ -332,14 +332,14 @@ export default function Login() {
                                                     action={
                                                         <Radio
                                                             checked={selectedValue === 'personal'}
-                                                            onChange={handleChange}
+                                                            onChange={handleRoleChange}
                                                             value="personal"
                                                         />
                                                     }
                                                     title={<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Personal</Typography>}
-                                                    subheader={<Typography variant="caption">I want to organize stuff in my house</Typography>}
+                                                    subheader={<Typography variant="caption" color={selectedValue === 'personal' ? "primary" :"text.primary"}>I want to organize stuff in my house</Typography>}
                                                 />
-                                                <MenuItem></MenuItem>                                              </Card>
+                                             </Card>
                                         </Grid>
 
                                     </Grid>
@@ -368,7 +368,7 @@ export default function Login() {
                                             <TextField
                                                 fullWidth
                                                 label="Industry"
-                                                name="industry"
+                                                name="bio"
                                                 onChange={handleChange}
                                             />
                                         </Grid>
@@ -376,13 +376,13 @@ export default function Login() {
                                             <TextField
                                                 fullWidth
                                                 select
-                                                label="What are you using Sortly to track"
+                                                label="What products are you using Sortly to track"
                                                 name="industry"
                                                 onChange={handleChange}
                                             >
-                                                <MenuItem value="IT"> IT Equipments</MenuItem>
-
-                                                <MenuItem value="cosmetics">Cosmetics</MenuItem>
+                                                <MenuItem value="consumer">Consumer Products</MenuItem>
+                                                <MenuItem value="industrial">Industrial Products</MenuItem>
+                                                <MenuItem value="service"> Service Products</MenuItem>
                                             </TextField>
                                         </Grid>
 

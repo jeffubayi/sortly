@@ -10,7 +10,7 @@ export default function AppLayout({ children,title }: Props) {
     return (
         <Grid container component="main" sx={{ height: '100vh' }} >
             <CssBaseline />
-            <Grid item xs={12} md={5} component={Paper} square px={{ xs: 1, sm: 2, md: 8 }}>
+            <Grid item xs={12} md={4} component={Paper} square px={{ xs: 1, sm: 2, md: 4 }}>
                 <Box
                     sx={{
                         my: 5,
@@ -30,7 +30,7 @@ export default function AppLayout({ children,title }: Props) {
                 </Box>
                 {children}
             </Grid>
-            <Grid item xs={false} sm={4} md={7}
+            <Grid item xs={false} sm={4} md={8}
                 sx={{
                     backgroundImage: 'url(https://cdn.dribbble.com/users/2616177/screenshots/9094753/media/e6e10209f151e988e2a309fe384d1a0c.png)',
                     backgroundRepeat: 'repeat',
