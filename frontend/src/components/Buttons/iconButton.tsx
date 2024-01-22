@@ -8,7 +8,9 @@ function primary({ handleClick, label, icon }: { handleClick: any, label: string
             fullWidth
             variant="outlined"
             color='secondary'
+            sx={{borderRadius:"7px"}}
             onClick={handleClick}
+            size="small"
 
         >
             {label}

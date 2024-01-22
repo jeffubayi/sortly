@@ -25,6 +25,7 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { SET_NAME, SET_USER } from '../redux/features/auth/authSlice'
 import { logoutUser, getUser, getLoginStatus } from '../services/authService';
 import { SET_LOGIN, selectUser, selectName } from '../redux/features/auth/authSlice';
+import Person from "../images/person.png"
 
 type Anchor = 'top' | 'left' | 'bottom' | 'right';
 
@@ -216,7 +217,7 @@ export default function Navbar() {
                                 color="inherit"
                                 onClick={handleClick}
                             >
-                                <Avatar src={userData.photo || "avatarr.png"} alt={userName} />
+                                <Avatar src={Person} alt={userName} />
                             </IconButton>
                         </Tooltip>
                         <Menu
@@ -256,7 +257,7 @@ export default function Navbar() {
                             <ListItem >
                                 <Tooltip title="Profile" >
                                     <ListItemAvatar>
-                                        <Avatar src={userData.photo} alt={userName} />
+                                        <Avatar src={Person} alt={userName} />
                                     </ListItemAvatar>
                                 </Tooltip>
                                 <ListItemText primary={userData.name} secondary={userData.email} />

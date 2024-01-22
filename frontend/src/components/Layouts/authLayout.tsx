@@ -20,11 +20,11 @@ export default function AppLayout({ children,title }: Props) {
                     }}
                 >
                     <Avatar
-                        sx={{ mb: 2, height: "5.5rem", width: "5.5rem" }}
+                        sx={{ mb: 2, height: "4rem", width: "4rem" }}
                         src="https://images.surferseo.art/6171630f-b376-43b5-ad66-732c449a2792.png"
                     >
                     </Avatar>
-                    <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                    <Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>
                         {title}
                     </Typography>
                 </Box>
