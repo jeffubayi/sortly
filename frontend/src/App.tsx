@@ -75,7 +75,7 @@ function App() {
           </AuthLayout>
         } />
         <Route path="/auth/register" element={
-          <AuthLayout title='Register for an account'>
+          <AuthLayout title='Create new Account'>
             <Register />
           </AuthLayout>
         } />

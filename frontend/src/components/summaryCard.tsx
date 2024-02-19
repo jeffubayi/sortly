@@ -90,7 +90,7 @@ export default function SummaryCard({products}:{products:any}) {
               <Card
                 sx={{
                   borderRadius: "0.6rem",
-                  bgcolor: "background.paper",
+                  bgcolor: "background.default",
                   boxShadow: "10px 10px 8px rgb(157 168 189 / 17%)",
                 }}
                 elevation={0}

@@ -24,7 +24,7 @@ export default function Layout({ children }: Props) {
     return (
         <div>
             <HeaderNavbar />
-            <Box component="main" sx={{ bgcolor: 'background.default',flexGrow: 1, p: 3  }}>
+            <Box component="main" sx={{ bgcolor: 'background.paper',flexGrow: 1, p: 3  }}>
               {/* <DrawerHeader/> */}
                 <Container disableGutters maxWidth="lg" component="main">
                     {children}

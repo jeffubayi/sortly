@@ -1,8 +1,10 @@
 import axios from "axios";
 import { toast } from "react-hot-toast";
+import generateOTP from "../utility/generateOTP"
 
 export const BACKEND_URL = process.env.REACT_APP_BACKEND_URL;
 
+const OTP_Code = generateOTP()
 export const validateEmail = (email: string) => {
   return email.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/)
 }
@@ -30,6 +32,27 @@ export const registerUser = async (userData: any) => {
       toast.success("User Registered Successfully");
     }
     return response.data;
+  } catch (error: any) {
+    const message =
+      (error.response && error.response.data && error.response.data.message) ||
+      error.message ||
+      error.toString();
+    toast.error(message)
+  }
+};
+
+//OTP verification
+export const sendOTP = async (recipients: any, message?: any) => {
+  try {
+    const response = await axios.post(
+      `${BACKEND_URL}/api/sms`,
+      {
+        message: `Your Verification Code is ${OTP_Code}`,
+        recipients: [recipients.split(" ").join("")]
+      }
+    )
+    toast.success(response.data.message);
+    return OTP_Code
   } catch (error: any) {
     const message =
       (error.response && error.response.data && error.response.data.message) ||

@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { Grid, Card, Box, CardHeader, Radio, Stack, Typography, Chip, TextField, Alert, Divider, StepLabel, Step, Paper, Stepper, Button, MenuItem, Avatar, ListItem, ListItemAvatar, ListItemText } from '@mui/material';
 import toast from 'react-hot-toast';
 import { MuiFileInput } from 'mui-file-input'
@@ -12,11 +12,10 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from "react-router-dom";
 
-import { selectName } from '../../redux/features/auth/authSlice';
-import { updateUser } from "../../services/authService";
+import { selectName, selectOtp } from '../../redux/features/auth/authSlice';
+import { updateUser, sendOTP } from "../../services/authService";
 import { SET_USER } from "../../redux/features/auth/authSlice"
 import Person from "../../images/person.png"
-
 
 
 const steps = ['Select Role', 'Personal Details', 'Verify Account'];
@@ -32,9 +31,12 @@ export default function Login() {
     const [otp, setOtp] = useState('');
     const [expiryCounter, setExpiryCounter] = useState(300);
     const [isUpdateLoading, setIsUpdateLoading] = useState(false);
+    const [checkOtp, setCheckOtp] = useState(true);
     const [resendLoading, setResendLoading] = useState(false);
     const [otpError, setOtpError] = useState("");
     const [selectedValue, setSelectedValue] = React.useState('business');
+    const phone = localStorage.getItem('user_phone')
+    const OTP_Code = useSelector(selectOtp)
 
     const handleRoleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setSelectedValue(event.target.value);
@@ -45,6 +47,9 @@ export default function Login() {
 
     const handleChangeOTP = (newValue: string) => {
         setOtp(newValue)
+        if (OTP_Code === newValue) {
+            setCheckOtp(false)
+        }
     }
 
 
@@ -110,29 +115,6 @@ export default function Login() {
         }
     };
 
-    const sendOTP = async () => {
-        const recipients = {
-            recipients: ['+254707748115'],
-        };
-        if (otp) {
-            setResendLoading(true);
-            const otpResponse = await axios({
-                method: "post",
-                url: "auth/otp/sms",
-                data: recipients,
-            });
-            setResendLoading(false);
-            console.log("otpResponse from sending otp");
-            console.log(otpResponse.data);
-            if (otpResponse.data.success) {
-                localStorage.setItem("otpToken", otpResponse.data.data.otpToken);
-                toast.success("Kindly check your phone for the OTP");
-                setExpiryCounter(300);
-            } else {
-                toast.error("OTP could not be send, try again later");
-            }
-        }
-    };
 
     // const handleBack = () => {
     //     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -149,29 +131,14 @@ export default function Login() {
         });
     };
 
-    const handleFileChange = (event: any) => {
-        // setUploading(true)
-        const files = event.target.files;
-        const myFiles = Array.from(files);
-        // const filePath = `profile/${myFiles[0]?.name}`
-        // const storageRef = ref(storage, filePath);
-        // upload image to firebase
-        // uploadBytes(storageRef, myFiles[0]).then((snapshot) => {
-        // get uploaded image
-        // const bucketRef = ref(storage, snapshot.metadata.fullPath);
-        // getDownloadURL(bucketRef)
-        // .then(async (avatar) => {
-        // update user profile
-        // setAvatar(avatar);
-        // setUploading(false)
-        toast.success("Profile photo  successfully updated");
+    const handleResend = async () => {
+        setResendLoading(true)
+        const responseCode = await sendOTP(phone);
+        setExpiryCounter(200)
+        if (responseCode === otp) {
+            setCheckOtp(false)
+        }
 
-        //     dispatch(updateUser({
-        //         ...user,
-        //         avatar,
-        //     }))
-        // })
-        // });
     };
 
     // const validationSchema = Yup.object({
@@ -209,27 +176,27 @@ export default function Login() {
         setActiveStep((prevActiveStep) => prevActiveStep - 1);
     };
 
-    const handleNext = (event: any) => {
+    const handleNext = async (event: any) => {
+        console.log('STEPS', activeStep)
         if (activeStep === steps.length - 1) {
             toast.success("post db")
-            // console.log(`formData`, formData,activeStep)
             handleSignUp()
         }
         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        // if (activeStep === 0) {
-        //     if (formData.role != "") {
-        //         setActiveStep((prevActiveStep) => prevActiveStep + 1);
-        //     }else{
-        //         setFormErrors({
-        //             ...formErrors,
-        //             [event.target.name]: 'required',
-        //         }); 
-        //     }
-        // }
+
+        //send OTP
         // if (activeStep === 1) {
-        //     if (formData.phone!= "" && formData.image != ""  && formData.bio!= "" ) {
-        //         setActiveStep((prevActiveStep) => prevActiveStep + 1);
+        //     const responseCode = await sendOTP(phone);
+        //     setCode(responseCode)
+
+        // const response = await axios.post(
+        //     `http://localhost:4000/api/sms`,
+        //     {
+        //       message: `Your Verification Code is 7777`,
+        //       recipients: [phone]
         //     }
+        //   )
+        //   toast.success(response.data.message);
         // }
 
     };
@@ -319,12 +286,12 @@ export default function Login() {
                                                         />
                                                     }
                                                     title={<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Business</Typography>}
-                                                    subheader={<Typography variant="caption" color={selectedValue === 'business' ? "primary" :"text.primary"}>I want to track inventory at my workplace</Typography>}
+                                                    subheader={<Typography variant="caption" color={selectedValue === 'business' ? "primary" : "text.primary"}>I want to track inventory at my workplace</Typography>}
                                                 />
                                             </Card>
                                         </Grid>
                                         <Grid item xs={12} >
-                                            <Card  elevation={selectedValue === 'personal' ? 3 : 0}>
+                                            <Card elevation={selectedValue === 'personal' ? 3 : 0}>
                                                 <CardHeader
                                                     avatar={
                                                         <Avatar src={Person} />
@@ -337,9 +304,9 @@ export default function Login() {
                                                         />
                                                     }
                                                     title={<Typography variant="subtitle1" sx={{ fontWeight: "bold" }}>Personal</Typography>}
-                                                    subheader={<Typography variant="caption" color={selectedValue === 'personal' ? "primary" :"text.primary"}>I want to organize stuff in my house</Typography>}
+                                                    subheader={<Typography variant="caption" color={selectedValue === 'personal' ? "primary" : "text.primary"}>I want to organize stuff in my house</Typography>}
                                                 />
-                                             </Card>
+                                            </Card>
                                         </Grid>
 
                                     </Grid>
@@ -413,13 +380,13 @@ export default function Login() {
                                                 <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.65rem" }}>We have sent a One Time Password to your phone and email <strong>{formData?.phone}</strong></Typography>
                                                 {expiryCounter < 0 ? (
                                                     <Typography variant="caption" sx={{ color: "grey", mt: 2, fontSize: "0.8rem" }}> You can resend after <b> {fancyTimeFormat(expiryCounter)}</b></Typography>) : (
-                                                    <Button onClick={sendOTP} variant="text">{resendLoading ? "Sending OTP..." : "Resend OTP"}</Button>
+                                                    <Button onClick={handleResend} disabled={!checkOtp} variant="text">{resendLoading ? "Verifying..." : "Resend OTP"}</Button>
                                                 )}
 
-                                                <Button onClick={handleVerify} fullWidth variant="contained">
-                                                    {!isUpdateLoading ? (
-                                                        "Verify Account"
-                                                    ) : ("Verifying..")}
+                                                <Button onClick={handleVerify} fullWidth variant="contained" disabled={checkOtp}>
+                                                    {checkOtp ? (
+                                                        "Verifying OTP..."
+                                                    ) : ("View Dashboard")}
                                                 </Button>
                                             </Stack>
                                         </Grid>

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Grid, Box, Divider, Typography, Stack } from '@mui/material';
+import { Grid, Box, Divider, Typography, Stack, Checkbox, FormControlLabel } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import toast from 'react-hot-toast';
 import { Formik, Form } from 'formik';
@@ -11,8 +11,8 @@ import { MuiTelInput, matchIsValidTel } from 'mui-tel-input'
 import Google from "../../images/google.png"
 import { LogoButton, MainButton } from "../../components/Buttons";
 import { InputField } from "../../components/TextFields";
-import { registerUser } from "../../services/authService";
-import { SET_NAME, SET_LOGIN, SET_USER } from "../../redux/features/auth/authSlice"
+import { registerUser, sendOTP } from "../../services/authService";
+import { SET_NAME, SET_LOGIN, SET_USER,SET_OTP } from "../../redux/features/auth/authSlice"
 
 
 const validationSchema = Yup.object({
@@ -58,6 +58,8 @@ export default function Register() {
                 localStorage.setItem('user_phone', phone)
                 if (data.bio === "bio") {
                     navigate('/auth/onboarding');
+                    const OTPCode = await sendOTP(phone);
+                    await dispatch(SET_OTP(OTPCode))
                 } else {
                     navigate('/dashboard');
                 }
@@ -103,8 +105,19 @@ export default function Register() {
                             </Divider>
                             <Grid container
                                 rowSpacing={2}
-                                columnSpacing={{ xs: 2, sm: 3, md: 5 }}
+                                columnSpacing={{ xs: 2, sm: 3, md: 2 }}
                             >
+                                <Grid item xs={12}>
+                                    <MuiTelInput
+                                        value={phone}
+                                        label="Phone Number"
+                                        onChange={handleChange}
+                                        // helperText={phoneError}
+                                        defaultCountry="KE"
+                                        fullWidth
+                                        autoFocus
+                                    />
+                                </Grid>
                                 <Grid item xs={12} md={6}>
                                     <InputField
                                         name="firstName"
@@ -121,18 +134,7 @@ export default function Register() {
                                         type='text'
                                     />
                                 </Grid>
-                                <Grid item xs={12}>
-                                    <MuiTelInput
-                                        value={phone}
-                                        label="Phone Number"
-                                        onChange={handleChange}
-                                        // helperText={phoneError}
-                                        defaultCountry="KE"
-                                        fullWidth
-                                        autoFocus
-                                    />
 
-                                </Grid>
                                 <Grid item xs={12}>
                                     <InputField
                                         type='email'
@@ -157,7 +159,12 @@ export default function Register() {
                                         type="password"
                                     />
                                 </Grid>
-
+                                <Grid item xs={12}>
+                                    <FormControlLabel
+                                        control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                        label="I agree to sortly inventory terms and conditions."
+                                    />
+                                </Grid>
                                 <Grid item xs={12} >
                                     <MainButton
                                         type="submit"
