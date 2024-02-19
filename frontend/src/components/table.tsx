@@ -105,17 +105,6 @@ export default function Table(props: Props) {
                 Recent Items
             </Typography>
             <Box sx={{ borderRadius: "0.6rem", boxShadow: '10px 10px 8px rgb(157 168 189 / 17%)' }}>
-                {/* {open &&
-                <ActionDialog
-                    open={open}
-                    handleClose={handleClose}
-                    data={data}
-                    method={method}
-                />
-            } */}
-                {/* {error ? (
-                <Paper>You have no bookings at the moment</Paper>
-            ) : ( */}
                 <DataGrid
                     disableColumnMenu
                     disableDensitySelector
@@ -133,7 +122,7 @@ export default function Table(props: Props) {
                     onPaginationModelChange={setPaginationModel}
                     slots={{ toolbar: GridToolbar }}
                     slotProps={filterProps}
-                    sx={{ borderRadius: "1rem", bgcolor: 'background.paper' }}
+                    sx={{ borderRadius: "1rem", bgcolor: 'background.default' }}
                 />
             </Box>
         </Grid>
